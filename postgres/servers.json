@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Lost and Found DB",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "lost_and_found",
+            "Username": "user",
+            "SSLMode": "prefer"
+        }
+    }
+}

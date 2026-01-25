@@ -1,0 +1,67 @@
+spring:
+  application:
+    name: app
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SUPPORT_EMAIL:dummy@example.com}
+    password: ${APP_EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  security.oauth2.client:
+    registration:
+      google:
+        client-id: ${GOOGLE_OAUTH2_CLIENT_ID}
+        client-secret: ${GOOGLE_OAUTH2_CLIENT_SECRET}
+
+
+logging:
+  level:
+    org.springframework.security: INFO
+security:
+  jwt:
+    ec-private-key-pem: ${JWT_ES256_PRIVATE_KEY_PEM}
+    ec-public-key-pem: ${JWT_ES256_PUBLIC_KEY_PEM}
+    hmac-secret-key: ${JWT_HMAC_SECRET_KEY}
+    expiration-time: ${JWT_EXPIRATION_TIME} #one day
+    is-prod: false
+hostname:
+  dev: ${DEV_HOSTNAME}
+  prod: ${PROD_HOSTNAME}
+
+app:
+  # Base URL of the frontend. Verification and reset links in emails point here.
+  frontend-url: ${FRONTEND_URL:${DEV_HOSTNAME}}
+  # Origins the native iOS app's web view sends requests from (Capacitor's default is capacitor://localhost).
+  native-origins: ${NATIVE_ORIGINS:capacitor://localhost}
+  google:
+    # Google client ids that identity tokens may be issued to: the web client and the iOS client. Comma-separated.
+    client-ids: ${GOOGLE_CLIENT_IDS:}
+  apple:
+    # App bundle ids that Sign in with Apple tokens may be issued to. Comma-separated.
+    bundle-ids: ${APPLE_BUNDLE_IDS:}
+    # Revocation on account deletion needs all three. Leave empty to skip it (logged). Never commit the key.
+    team-id: ${APPLE_TEAM_ID:}
+    key-id: ${APPLE_KEY_ID:}
+    private-key-pem: ${APPLE_PRIVATE_KEY_PEM:}
+
+vision:
+  huggingface:
+    api-token: ${HUGGINGFACE_API_TOKEN:}
+    model: google/vit-base-patch16-224
+    api-url: https://router.huggingface.co/hf-inference/models/
+    enabled: ${VISION_ENABLED:true}

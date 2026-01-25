@@ -1,0 +1,523 @@
+.profile-dashboard {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #f9f9f9;
+  text-align: left;
+}
+
+.sidebar {
+  width: 260px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #ececec 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid #ddd;
+}
+
+.sidebar-profile-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.profile-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #000;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.profile-name {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.profile-email {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.nav-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #000;
+}
+
+.nav-btn.active {
+  background-color: #000;
+  color: #fff;
+  border-left-color: #fff;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+}
+
+.logout-btn {
+  width: 100%;
+  color: #d9534f;
+}
+
+.logout-btn:hover {
+  background-color: rgba(217, 83, 79, 0.1);
+  color: #c9302c;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 40px 60px;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+.tab-content h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #000;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.tab-content p {
+  color: #444;
+  line-height: 1.6;
+}
+
+.items-message {
+  margin-top: 12px;
+  color: #555;
+}
+
+.items-message.error {
+  color: #b91c1c;
+}
+
+.item-group {
+  margin-top: 24px;
+}
+
+.item-group h3 {
+  font-size: 20px;
+  margin: 0 0 12px;
+  color: #000;
+}
+
+.items-empty {
+  color: #666;
+  margin: 0;
+}
+
+.my-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.my-item-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.my-item-image-wrap {
+  cursor: pointer;
+  background: #f4f4f4;
+}
+
+.my-item-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  background: #fff;
+}
+
+.my-item-body {
+  padding: 14px;
+}
+
+.my-item-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.my-item-topline h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #111;
+}
+
+.my-item-status {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.my-item-status.open {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.my-item-status.resolved {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.my-item-status.pending_resolution {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.my-item-image--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.my-item-pending-note {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #92400e;
+}
+
+/* Lost / Found grouping */
+.item-category {
+  margin-bottom: 32px;
+}
+
+.item-category-title {
+  margin: 0 0 12px;
+  font-size: 20px;
+  color: #000;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 6px;
+}
+
+.item-group-title {
+  margin: 16px 0 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #666;
+}
+
+.modal-hint {
+  font-size: 13px;
+  color: #555;
+  margin: 10px 0 0;
+}
+
+.modal-error {
+  font-size: 13px;
+  color: #b91c1c;
+  margin: 10px 0 0;
+}
+
+.my-item-location {
+  margin: 10px 0 14px;
+  font-size: 13px;
+  color: #666;
+}
+
+.my-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.my-item-btn {
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.my-item-btn.secondary {
+  background: #eee;
+  color: #222;
+}
+
+.my-item-btn.primary {
+  background: #000;
+  color: #fff;
+}
+
+.my-item-btn:hover {
+  opacity: 0.92;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.back-btn:hover {
+  color: #000;
+}
+
+/* MODAL STYLES */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+}
+
+.modal-description {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.modal-loading,
+.modal-empty {
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+  padding: 20px;
+}
+
+.claim-candidates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.candidate-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.candidate-btn:hover {
+  border-color: #999;
+  background: #f9f9f9;
+}
+
+.candidate-btn.selected {
+  border-color: #000;
+  background: #f0f0f0;
+  font-weight: 600;
+}
+
+.candidate-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.candidate-btn span {
+  flex: 1;
+  text-align: left;
+  font-size: 14px;
+  color: #000;
+}
+
+.modal-skip-option {
+  margin-bottom: 24px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.skip-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.skip-label input {
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modal-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-btn.primary {
+  background: #000;
+  color: #fff;
+}
+
+.modal-btn.primary:hover {
+  background: #333;
+}
+
+.modal-btn.secondary {
+  background: #e0e0e0;
+  color: #000;
+}
+
+.modal-btn.secondary:hover {
+  background: #d0d0d0;
+}
+
+/* Settings: account deletion (destructive, so it sits apart and needs a second click). */
+.danger-zone {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.danger-zone h3 {
+  color: #b91c1c;
+  margin: 0 0 8px;
+}
+
+.danger-zone p {
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.danger-zone__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.danger-zone__error {
+  color: #b91c1c;
+}
+
+.danger-btn,
+.secondary-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.danger-btn {
+  border: 1px solid #b91c1c;
+  background-color: #b91c1c;
+  color: #ffffff;
+}
+
+.danger-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondary-btn {
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #111827;
+}

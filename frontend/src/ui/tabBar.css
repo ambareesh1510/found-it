@@ -1,0 +1,77 @@
+/* Bottom tab bar and the signed-in app shell it sits in.
+
+   Layout: the app is a full-viewport flex column. The current screen takes the space above the bar and scrolls
+   on its own if it is taller, and the bar sits in the flow below it. So the bar never covers content and the
+   document itself never scrolls. Only .has-tab-bar (set by App while the bar is visible) changes the shell. */
+
+:root {
+  --tab-bar-height: 64px;
+}
+
+.app-container.has-tab-bar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.app-container.has-tab-bar > :not(.app-tab-bar) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.app-tab-bar {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  height: calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  display: flex;
+  align-items: stretch;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -2px 10px rgba(17, 24, 39, 0.06);
+}
+
+.app-tab {
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 0;
+  border: none;
+  background: none;
+  color: #6b7280;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-tab[aria-current='page'] {
+  color: #1d4ed8;
+}
+
+.app-tab:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: -2px;
+}
+
+/* The map's floating "Add item" button is fixed to the viewport, so lift it above the bar. */
+.app-container.has-tab-bar .fab-create-btn {
+  bottom: calc(var(--tab-bar-height) + 16px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Screens that fill the space above the bar. */
+.app-container.has-tab-bar .profile-dashboard {
+  height: 100%;
+}
+
+/* Home must not scroll. The generic rule above gives every screen overflow-y: auto, so override it here. */
+.app-container.has-tab-bar > .home-page {
+  overflow: hidden;
+}

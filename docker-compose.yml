@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgis/postgis:18-3.6
+    platform: linux/amd64
+    container_name: laf-postgis
+    restart: always
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in backend/app/.env}
+      - POSTGRES_DB=lost_and_found
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres:/docker-entrypoint-initdb.d
+    networks:
+      - laf-network
+  pg-admin:
+    image: dpage/pgadmin4
+    container_name: laf-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:?set PGADMIN_DEFAULT_PASSWORD in backend/app/.env}
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    volumes:
+      - ./postgres/servers.json:/pgadmin4/servers.json
+    networks:
+      - laf-network
+  laf-backend:
+    build: ./backend
+    container_name: laf-app
+    restart: on-failure
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./backend/app/.env
+    networks:
+      - laf-network
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - laf-backend
+    env_file:
+      - ./frontend/.env
+    environment:
+      # The browser runs on the host, so it must reach the backend through the published port, not the Docker name.
+      - VITE_API_URL=http://localhost:8080
+    networks:
+      - laf-network
+
+networks:
+  laf-network:
+    driver: bridge

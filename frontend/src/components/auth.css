@@ -1,0 +1,351 @@
+/* Shared styles for the Login, Register and Forgot Password screens.
+   Colours and radii follow docs/design/ui-spec.md (neutral auth palette, 12px inputs, 16px card). */
+
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 24px 16px;
+  box-sizing: border-box;
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 36px 28px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.auth-brand {
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  color: #111827;
+}
+
+.auth-heading {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #111827;
+}
+
+.auth-subtext {
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/* Inline messages replace window.alert popups. */
+.auth-alert {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.auth-alert--error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.auth-alert--success {
+  background-color: #ecfdf5;
+  color: #047857;
+}
+
+.auth-field {
+  margin-bottom: 18px;
+}
+
+.auth-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+/* Inputs stay white with black text in every state. color-scheme stops the OS dark mode
+   from restyling them, and the -webkit-autofill rules stop the browser recolouring them. */
+.auth-page {
+  color-scheme: light;
+}
+
+.auth-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #000000;
+  -webkit-text-fill-color: #000000;
+  caret-color: #000000;
+  color-scheme: light;
+  font-family: inherit;
+  /* 16px prevents iOS Safari from zooming when the field is focused. */
+  font-size: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-input::placeholder {
+  color: #6b7280;
+  -webkit-text-fill-color: #6b7280;
+  opacity: 1;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: #111827;
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.12);
+}
+
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus,
+.auth-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  box-shadow: 0 0 0 1000px #ffffff inset;
+  -webkit-text-fill-color: #000000;
+  caret-color: #000000;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.auth-input[aria-invalid='true'] {
+  border-color: #b91c1c;
+}
+
+.auth-hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #6b7280;
+}
+
+.auth-hint--ok {
+  color: #047857;
+}
+
+.auth-hint--bad {
+  color: #b91c1c;
+}
+
+/* Live password requirements checklist (see components/PasswordRules.jsx). */
+.auth-rules {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #6b7280;
+}
+
+.auth-rules__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.auth-rules__mark {
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.auth-rules__item.is-met {
+  color: #047857;
+}
+
+.auth-rules__item.is-unmet {
+  color: #b91c1c;
+}
+
+.auth-alert__action {
+  margin-top: 6px;
+}
+
+.auth-alert__action .auth-link {
+  color: inherit;
+}
+
+.auth-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin: -4px 0 8px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.auth-checkbox input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #111827;
+}
+
+.auth-forgot {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 20px;
+}
+
+.auth-link {
+  min-height: 44px;
+  padding: 0 0 0 4px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.auth-link:hover {
+  color: #374151;
+}
+
+.auth-btn {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.auth-btn--primary {
+  background-color: #111827;
+  color: #ffffff;
+}
+
+.auth-btn--primary:hover:not(:disabled) {
+  background-color: #374151;
+}
+
+.auth-btn--secondary {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #111827;
+}
+
+.auth-btn--secondary:hover:not(:disabled) {
+  background-color: #f9fafb;
+}
+
+.auth-btn--spaced {
+  margin-top: 12px;
+}
+
+/* <a> elements styled as buttons (Link from react-router). */
+.auth-btn--link {
+  box-sizing: border-box;
+  line-height: 52px;
+  text-decoration: none;
+}
+
+.auth-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: #e5e7eb;
+}
+
+.auth-btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-btn-google:hover {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+.auth-btn-google .google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Native only: Apple's sign-in button uses the black style from Apple's guidelines. Same size as the Google button. */
+.auth-btn--apple {
+  width: 100%;
+  min-height: 52px;
+  box-sizing: border-box;
+  border: 1px solid #000000;
+  border-radius: 12px;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.auth-btn--apple:hover:not(:disabled) {
+  background-color: #1f2937;
+}
+
+.auth-footer {
+  margin: 24px 0 0;
+  font-size: 14px;
+  text-align: center;
+  color: #4b5563;
+}

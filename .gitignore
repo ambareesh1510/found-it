@@ -1,0 +1,5 @@
+.idea/
+node_modules/
+
+# Local reference only; not pushed to GitHub
+docs/Project/

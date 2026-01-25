@@ -1,0 +1,20 @@
+/* Design tokens from docs/design/ui-spec.md. Every flow style reads from these,
+   so the iOS build can map the same names to Swift colors and sizes. */
+:root {
+  --color-lost-from: #f59e0b;
+  --color-lost-to: #ea580c;
+  --color-found-from: #3b82f6;
+  --color-found-to: #1d4ed8;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+
+  --color-surface: #ffffff;
+  --color-page: #f3f4f6;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+
+  --radius-card: 12px;
+  --radius-feature: 16px;
+  --touch-min: 44px;
+}

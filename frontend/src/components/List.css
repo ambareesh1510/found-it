@@ -1,0 +1,375 @@
+.list-container {
+  padding: 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eaeaea;
+}
+
+.list-header h1 {
+  margin: 0;
+  color: #000;
+}
+
+.filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.filter-section > * {
+  flex: 1 1 140px;
+}
+
+.filter-input {
+  flex: 2 1 250px;
+}
+
+.filter-input,
+.filter-select {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.map-section {
+  margin-bottom: 24px;
+}
+
+.map-overlay-wrap {
+  position: relative;
+}
+
+.items-map {
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.map-message {
+  margin: 0;
+  padding: 12px;
+  border: 1px dashed #bbb;
+  border-radius: 8px;
+  color: #666;
+  background: #fafafa;
+  font-size: 14px;
+}
+
+.marker-filter-message {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.clear-marker-filter-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  border: none;
+  background: #000;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.clear-marker-filter-btn:hover {
+  background: #333;
+}
+
+.map-info-window {
+  min-width: 180px;
+}
+
+.map-info-window p {
+  margin: 4px 0;
+  font-size: 12px;
+}
+
+.map-item-popup {
+  width: 130px;
+  cursor: pointer;
+}
+
+.map-item-popup-image {
+  width: 100%;
+  height: 67px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #f4f4f4;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.map-item-popup-content h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #111;
+}
+
+.map-item-popup-content p {
+  margin: 0;
+  font-size: 12px;
+  color: #555;
+}
+
+.btn-location {
+  padding: 10px 12px;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.btn-location:hover:not(:disabled) {
+  background-color: #f4f4f4;
+  border-color: #bbb;
+}
+
+.btn-location:disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+
+.btn-location.active {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.radius-select {
+  flex: 1 1 120px;
+  background-color: #f8fcf8;
+  border-color: #000;
+}
+
+.location-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+ /* GRID LAYOUT  */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+ /* CARD STYLING  */
+.item-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.item-card:hover {
+  transform: translateY(-4px);
+}
+
+.item-image-container {
+  position: relative;
+  height: 200px;
+  width: 100%;
+  background-color: #f4f4f4;
+}
+
+.item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+ /* BADGES  */
+.post-type-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.post-type-badge.lost {
+  background-color: #d9534f;
+}
+
+.post-type-badge.found {
+  background-color: #5cb85c;
+}
+
+ /* TEXT DETAILS  */
+.item-details {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.item-title {
+  margin: 0 0 6px 0;
+  font-size: 18px;
+  color: #000;
+}
+
+.item-location {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.item-description {
+  font-size: 14px;
+  color: #444;
+  flex-grow: 1;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.item-tag {
+  background: #e0f0ff;
+  color: #1a6fb5;
+  border: 1px solid #b3d7f5;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.item-category {
+  background: #eee;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #555;
+  font-weight: 500;
+}
+
+.item-status {
+  font-weight: 600;
+  color: #555;
+}
+
+.item-claim-btn {
+  margin-top: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+}
+
+.item-claim-btn:hover:not(:disabled) {
+  background: #333;
+}
+
+.item-claim-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+.claim-inline-error {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  background: #fee2e2;
+  color: #dc2626;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* ADD ITEM BUTTON */
+.fab-create-btn {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 65px;
+  height: 65px;
+  min-width: 65px;
+  min-height: 65px;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #000; 
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 1000; 
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.fab-create-btn:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
+
+@media (max-width: 900px) {
+  .filter-section {
+    grid-template-columns: 1fr;
+  }
+
+  .items-map {
+    height: 280px;
+  }
+}
