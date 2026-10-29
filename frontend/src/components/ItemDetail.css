@@ -261,23 +261,6 @@
   font-size: 14px;
   color: #666;
 }
-.detail-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 8px 0;
-}
-
-.detail-tag {
-  background: #f0f4ff;
-  color: #3b5bdb;
-  border: 1px solid #c5d0fc;
-  border-radius: 20px;
-  padding: 3px 10px;
-  font-size: 0.78rem;
-  font-weight: 500;
-}
-
 .detail-images {
   display: flex;
   gap: 8px;

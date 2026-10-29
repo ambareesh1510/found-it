@@ -175,14 +175,6 @@ function ItemDetail({ user }) {
             <p className="detail-meta">Category: <strong>{item.category}</strong></p>
           )}
 
-          {item.tags && item.tags.length > 0 && (
-            <div className="detail-tags">
-              {item.tags.map(tag => (
-                <span key={tag} className="detail-tag">🏷 {tag}</span>
-              ))}
-            </div>
-          )}
-
           {item.description && (
             <p className="detail-description">{item.description}</p>
           )}

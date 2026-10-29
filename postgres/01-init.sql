@@ -55,25 +55,6 @@ CREATE TABLE item_posts (
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE tags (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    category VARCHAR(50),
-    is_active BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-CREATE TABLE item_post_tags (
-    item_post_id BIGINT NOT NULL REFERENCES item_posts(id) ON DELETE CASCADE,
-    tag_id BIGINT NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
-
-    tag_source VARCHAR(20) NOT NULL CHECK (
-        tag_source IN ('USER', 'VISION')
-    ),
-
-    PRIMARY KEY (item_post_id, tag_id)
-);
-
 CREATE TABLE chat_threads (
     id BIGSERIAL PRIMARY KEY,
     item_post_id BIGINT NOT NULL REFERENCES item_posts(id) ON DELETE CASCADE,

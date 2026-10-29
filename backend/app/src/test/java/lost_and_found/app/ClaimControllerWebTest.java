@@ -79,8 +79,7 @@ class ClaimControllerWebTest {
                 "3rd floor",
                 Instant.parse("2026-03-14T10:00:00Z"),
                 Instant.parse("2026-03-14T10:00:00Z"),
-                Instant.parse("2026-03-14T10:00:00Z"),
-                List.of()
+                Instant.parse("2026-03-14T10:00:00Z")
             ),
             99L,
             9L,

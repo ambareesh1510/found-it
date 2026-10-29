@@ -26,7 +26,6 @@ Spring Boot also calls out to:
   • Google OAuth2        — federated login (web redirect flow)
   • Google / Apple JWKS  — verifies the ID tokens sent by the native sign-in buttons
   • Gmail SMTP           — verification + password reset mail
-  • HuggingFace Inference — google/vit-base-patch16-224 image auto-tagging (async, optional)
 ```
 
 Auth state is one JWT, delivered two ways. The web app receives it in an `HttpOnly`
@@ -44,8 +43,6 @@ reads either source. WebSockets never take the session token: they use a 60-seco
   `ST_DWithin`, not Haversine in Java. See `ItemSpecifications` and `PointUtil`.
 - **One `item_posts` table for both sides.** `post_type` (`LOST` | `FOUND`) discriminates.
   Do not create parallel tables.
-- **Vision tagging is best-effort.** `VisionTaggingService` runs `@Async` after the post
-  is persisted. Post creation must succeed when `VISION_ENABLED=false` or the API errors.
 - **`detail_location` is owner-only.** `ItemMapper` returns it only when the viewer is the
   poster. Do not add a new read path that maps items without passing the viewer id.
 - **The frontend is also the iOS app.** Capacitor packages the same build for Xcode, so

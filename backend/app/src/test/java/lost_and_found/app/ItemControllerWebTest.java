@@ -93,8 +93,7 @@ class ItemControllerWebTest {
             "3rd floor",
             now,
             now,
-            now,
-            List.of()
+            now
         );
 
         mockMvc.perform(post("/items")
@@ -152,8 +151,7 @@ class ItemControllerWebTest {
                 "3rd floor",
                 Instant.parse("2026-03-14T10:00:00Z"),
                 Instant.parse("2026-03-14T10:00:00Z"),
-                Instant.parse("2026-03-14T10:00:00Z"),
-                List.of()
+                Instant.parse("2026-03-14T10:00:00Z")
             )
         );
 

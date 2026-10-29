@@ -1,7 +1,6 @@
 package lost_and_found.app.items.dto.response;
 
 import java.time.Instant;
-import java.util.List;
 
 import lost_and_found.app.items.domain.ItemPostStatus;
 import lost_and_found.app.items.domain.PostType;
@@ -28,7 +27,6 @@ public record ItemPostResponseDTO(
     Instant eventTime,
     Instant createdAt,
     Instant updatedAt,
-    List<String> tags,
     PostType postType,
     Integer rewardCents,
     /** The chosen counterparty for a resolution in progress/complete, or null. See ItemPost. */
@@ -55,13 +53,12 @@ public record ItemPostResponseDTO(
         Instant eventTime,
         Instant createdAt,
         Instant updatedAt,
-        List<String> tags,
         PostType postType,
         Integer rewardCents
     ) {
         this(itemId, posterId, posterUsername, title, description, category, status,
             imageUrl, imageUrl2, latitude, longitude, locationText, detailLocation,
-            eventTime, createdAt, updatedAt, tags, postType, rewardCents, null, false, false);
+            eventTime, createdAt, updatedAt, postType, rewardCents, null, false, false);
     }
 
     /** Keeps the pre-reward call sites (and tests) compiling. */
@@ -82,12 +79,11 @@ public record ItemPostResponseDTO(
         Instant eventTime,
         Instant createdAt,
         Instant updatedAt,
-        List<String> tags,
         PostType postType
     ) {
         this(itemId, posterId, posterUsername, title, description, category, status,
             imageUrl, imageUrl2, latitude, longitude, locationText, detailLocation,
-            eventTime, createdAt, updatedAt, tags, postType, null);
+            eventTime, createdAt, updatedAt, postType, null);
     }
 
     /** Keeps the pre-postType call sites (and tests) compiling. */
@@ -107,11 +103,10 @@ public record ItemPostResponseDTO(
         String detailLocation,
         Instant eventTime,
         Instant createdAt,
-        Instant updatedAt,
-        List<String> tags
+        Instant updatedAt
     ) {
         this(itemId, posterId, posterUsername, title, description, category, status,
             imageUrl, imageUrl2, latitude, longitude, locationText, detailLocation,
-            eventTime, createdAt, updatedAt, tags, null, null);
+            eventTime, createdAt, updatedAt, null, null);
     }
 }

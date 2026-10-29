@@ -15,8 +15,7 @@ docker compose up --build
 
 Required backend variables are listed in [security.md](security.md#secrets--configuration).
 `SPRING_DATASOURCE_URL` must use `postgres` as the host under Compose. Without a Maps key
-the app still runs but map picking and map views are degraded. Without
-`HUGGINGFACE_API_TOKEN` set `VISION_ENABLED=false`; posting must still work.
+the app still runs but map picking and map views are degraded.
 
 | Service | URL |
 | --- | --- |

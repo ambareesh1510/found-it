@@ -425,14 +425,6 @@ function List() {
               <p className="item-location">📍 {formatItemLocation(item.locationText, item.detailLocation)}</p>
               <p className="item-description">{item.description}</p>
               
-              {item.tags && item.tags.length > 0 && (
-                <div className="item-tags">
-                  {item.tags.map(tag => (
-                    <span key={tag} className="item-tag">🏷 {tag}</span>
-                  ))}
-                </div>
-              )}
-
               <div className="item-footer">
                 <span className="item-category">{item.category}</span>
                 <span className={`item-status ${item.status.toLowerCase()}`}>{item.status}</span>
