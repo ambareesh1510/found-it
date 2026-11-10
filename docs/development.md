@@ -52,7 +52,7 @@ the phone cannot reach your laptop's `localhost`. Simulator and device both need
    `cap sync` copies `dist/` into `ios/App/App/public` and updates the Swift Package list.
 4. **Xcode.** `npx cap open ios`, then:
    - Set your Team under Signing & Capabilities, and change the bundle id to a real one in
-     both Xcode and `capacitor.config.json` (`appId` is a placeholder, `com.example.foundit`).
+     both Xcode and `capacitor.config.json` (`appId` is a placeholder, `com.gtcapstone.foundit`).
      The same id goes in `APPLE_BUNDLE_IDS`.
    - Add the **Sign in with Apple** capability. This cannot be done in code; Xcode writes the
      entitlement.
