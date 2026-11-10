@@ -90,9 +90,6 @@ public class ItemPost {
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "itemPost", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ItemPostTag> itemPostTags = new HashSet<>();
-
-    @OneToMany(mappedBy = "itemPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ItemClaim> claims = new HashSet<>();
 
     @PrePersist

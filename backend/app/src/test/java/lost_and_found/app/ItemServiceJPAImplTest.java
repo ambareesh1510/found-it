@@ -22,7 +22,6 @@ import lost_and_found.app.items.service.ItemMapper;
 import lost_and_found.app.items.service.ItemService;
 import lost_and_found.app.items.service.ItemServiceJPAImpl;
 import lost_and_found.app.items.service.PointUtil;
-import lost_and_found.app.items.service.VisionTaggingService;
 import lost_and_found.app.shared.domain.User;
 import lost_and_found.app.test_implementations.TestItemPostRepository;
 import lost_and_found.app.test_implementations.UserRepositoryTest;
@@ -42,17 +41,11 @@ class ItemServiceJPAImplTest {
         pointUtil = new PointUtil();
         itemMapper = new ItemMapper();
 
-        VisionTaggingService visionTaggingService = new VisionTaggingService(
-            "http://localhost", "test-model", "", false,
-            itemPostRepository, null, null
-        );
-
         itemService = new ItemServiceJPAImpl(
             userRepository,
             itemPostRepository,
             pointUtil,
-            itemMapper,
-            visionTaggingService
+            itemMapper
         );
     }
 

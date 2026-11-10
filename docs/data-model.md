@@ -47,11 +47,6 @@ One row per loser search, written before results are returned: `id` PK · `user_
 trail that makes false claims detectable. `location` is required for manual searches and
 null for Timeline searches; submitted Timeline points are used transiently and are not stored.
 
-### `tags`, `item_post_tags`
-`tags`: `id` · `name` unique · `category` · `is_active`.
-`item_post_tags`: composite PK (`item_post_id`, `tag_id`) · `tag_source` **`USER` | `VISION`**.
-Vision tags are capped at 3 per post with confidence ≥ 0.1.
-
 ### `chat_threads`, `chat_messages`
 `chat_threads`: `id` · `item_post_id` · `user1_id` · `user2_id` · timestamps.
 Invariants enforced in SQL: `user1_id <> user2_id`, `user1_id < user2_id` (canonical
@@ -71,7 +66,7 @@ Always normalize the pair before inserting.
 ## Relationships
 
 ```
-users 1──* item_posts 1──* item_post_tags *──1 tags
+users 1──* item_posts
       │                 1──* item_claims
       │                 1──* chat_threads 1──* chat_messages
       └──* jwt_token_blacklist

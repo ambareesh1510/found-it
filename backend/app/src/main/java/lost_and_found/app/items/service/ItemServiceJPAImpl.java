@@ -6,8 +6,6 @@ import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import lost_and_found.app.exceptions.ItemNotFoundException;
 import lost_and_found.app.exceptions.UserMismatchException;
@@ -32,20 +30,17 @@ public class ItemServiceJPAImpl implements ItemService {
     private final ItemPostRepository itemPostRepository;
     private final PointUtil pointUtil;
     private final ItemMapper itemMapper;
-    private final VisionTaggingService visionTaggingService;
 
     public ItemServiceJPAImpl(
         UserRepository userRepository,
         ItemPostRepository itemPostRepository,
         PointUtil pointUtil,
-        ItemMapper itemMapper,
-        VisionTaggingService visionTaggingService
+        ItemMapper itemMapper
     ) {
         this.userRepository = userRepository;
         this.itemPostRepository = itemPostRepository;
         this.pointUtil = pointUtil;
         this.itemMapper = itemMapper;
-        this.visionTaggingService = visionTaggingService;
     }
 
     @Transactional
@@ -74,18 +69,6 @@ public class ItemServiceJPAImpl implements ItemService {
         item.setRewardCents(item.getPostType() == PostType.LOST ? req.rewardCents() : null);
 
         ItemPost saved = itemPostRepository.save(item);
-        Long savedId = saved.getId();
-        // Fire AFTER commit so the item is visible to the async thread
-        if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                @Override
-                public void afterCommit() {
-                    visionTaggingService.tagItemAsync(savedId);
-                }
-            });
-        } else {
-            visionTaggingService.tagItemAsync(savedId);
-        }
         // The poster is the viewer here, so they receive their own detailLocation.
         return itemMapper.toResponse(saved, userId);
     }

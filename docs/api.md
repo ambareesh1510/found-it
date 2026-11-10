@@ -39,7 +39,7 @@ See [security.md](security.md#data-handling--privacy).
 
 | Method | Path | Auth | Notes |
 | --- | --- | --- | --- |
-| POST | `/items` | owner | `CreateItemDTO` → `ItemPostResponseDTO`. Triggers async vision tagging. |
+| POST | `/items` | owner | `CreateItemDTO` → `ItemPostResponseDTO`. |
 | PATCH | `/items/{itemId}` | owner | `UpdateItemDTO`; path `itemId` must equal body `itemId`. |
 | DELETE | `/items/{itemId}` | owner | `204`. |
 | GET | `/items/{itemId}` | public | Single post. `detailLocation` is returned only to the poster. |
@@ -58,7 +58,7 @@ See [security.md](security.md#data-handling--privacy).
 `ItemPostResponseDTO`: `itemId`, `posterId`, `posterUsername`, `title`, `description`,
 `category`, `status`, `imageUrl` (nullable), `imageUrl2`, `latitude`, `longitude`, `locationText`,
 `detailLocation` (**non-null only when the viewer is the poster**), `eventTime`, `createdAt`,
-`updatedAt`, `tags[]`, `postType`, `rewardCents` (nullable).
+`updatedAt`, `postType`, `rewardCents` (nullable).
 
 > **Rule: only the poster sees `detailLocation`.** It is stripped in `ItemMapper` for every other
 > viewer (anonymous, other users, claimants) on `GET /items`, `GET /items/{id}`, `GET /items/nearby`,

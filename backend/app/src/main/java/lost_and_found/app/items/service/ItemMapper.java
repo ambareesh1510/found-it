@@ -1,7 +1,5 @@
 package lost_and_found.app.items.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import lost_and_found.app.items.domain.ItemPost;
@@ -23,11 +21,6 @@ public class ItemMapper {
      * is the poster (docs/security.md: the finder's private detail is for the owner only).
      */
     public ItemPostResponseDTO toResponse(ItemPost itemPost, Long viewerId) {
-        List<String> tags = itemPost.getItemPostTags().stream()
-            .map(ipt -> ipt.getTag().getName())
-            .sorted()
-            .toList();
-
         boolean viewerIsPoster = viewerId != null && viewerId.equals(itemPost.getUser().getId());
         String detailLocation = viewerIsPoster ? itemPost.getDetailLocation() : null;
 
@@ -48,7 +41,6 @@ public class ItemMapper {
             itemPost.getEventTime(),
             itemPost.getCreatedAt(),
             itemPost.getUpdatedAt(),
-            tags,
             itemPost.getPostType(),
             itemPost.getRewardCents(),
             itemPost.getResolvedWithUser() == null ? null : itemPost.getResolvedWithUser().getId(),

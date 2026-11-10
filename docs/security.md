@@ -111,7 +111,7 @@ as a security regression.
 All secrets come from `backend/app/.env` and `frontend/.env`, which are never committed:
 `SPRING_DATASOURCE_*`, `JWT_HMAC_SECRET_KEY`, `JWT_ES256_PRIVATE_KEY_PEM` /
 `JWT_ES256_PUBLIC_KEY_PEM`, `GOOGLE_OAUTH2_CLIENT_ID` / `_SECRET`, `SUPPORT_EMAIL`,
-`APP_EMAIL_PASSWORD`, `HUGGINGFACE_API_TOKEN`. Native-app settings (not secret, but required):
+`APP_EMAIL_PASSWORD`. Native-app settings (not secret, but required):
 `NATIVE_ORIGINS` (default `capacitor://localhost`), `GOOGLE_CLIENT_IDS` (web and iOS client ids,
 comma-separated), `APPLE_BUNDLE_IDS` (the iOS bundle id). Sign in with Apple revocation also needs `APPLE_TEAM_ID`,
 `APPLE_KEY_ID`, and `APPLE_PRIVATE_KEY_PEM` (the `.p8` key contents; a secret). The frontend reads `VITE_API_URL`,
