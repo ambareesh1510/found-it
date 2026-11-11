@@ -206,10 +206,23 @@
   accent-color: #111827;
 }
 
+/* Show password (left) and Forgot password (right) on one line. */
+.auth-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -4px 0 20px;
+}
+
+.auth-row .auth-checkbox {
+  margin: 0;
+  min-height: 44px;
+}
+
 .auth-forgot {
   display: flex;
   justify-content: flex-end;
-  margin: 0 0 20px;
+  margin: 0;
 }
 
 .auth-link {
@@ -304,6 +317,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  width: 100%;
   min-height: 52px;
   box-sizing: border-box;
   border: 1px solid #d1d5db;

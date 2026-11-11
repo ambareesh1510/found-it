@@ -190,19 +190,21 @@ function LoginForm({ onLoginSuccess, onSwitchToRegister, onForgotPassword }) {
             />
           </div>
 
-          <label className="auth-checkbox">
-            <input
-              type="checkbox"
-              checked={showPassword}
-              onChange={(e) => setShowPassword(e.target.checked)}
-            />
-            Show password
-          </label>
+          <div className="auth-row">
+            <label className="auth-checkbox">
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />
+              Show password
+            </label>
 
-          <div className="auth-forgot">
-            <button type="button" className="auth-link" onClick={onForgotPassword}>
-              Forgot password?
-            </button>
+            <div className="auth-forgot">
+              <button type="button" className="auth-link" onClick={onForgotPassword}>
+                Forgot password?
+              </button>
+            </div>
           </div>
 
           <button type="submit" className="auth-btn auth-btn--primary" disabled={!canSubmit}>
