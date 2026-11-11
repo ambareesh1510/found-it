@@ -6,6 +6,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,33 +15,47 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 
 /**
- * Sends the account emails through Resend's HTTPS API. Links point at the frontend, which then calls the API.
+ * Sends the account emails through Brevo's HTTPS API. Links point at the frontend, which then calls the API.
  *
  * Hosts such as Render's free web services block outbound SMTP, so Gmail SMTP cannot be used there.
+ * Brevo sends to any recipient once the sender address is verified in Brevo (no domain needed).
  */
 @Service
 public class EmailService {
 
-    private static final URI RESEND_EMAILS_URI = URI.create("https://api.resend.com/emails");
+    private static final URI BREVO_EMAILS_URI = URI.create("https://api.brevo.com/v3/smtp/email");
+    private static final String DEFAULT_SENDER_NAME = "GT Lost and Found";
+    private static final Pattern NAME_AND_ADDRESS = Pattern.compile("^\\s*(.*?)\\s*<([^<>]+)>\\s*$");
 
     private final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
     private final String frontendUrl;
-    private final String resendApiKey;
-    private final String fromAddress;
+    private final String brevoApiKey;
+    private final String senderName;
+    private final String senderEmail;
 
     public EmailService(
             @Value("${app.frontend-url}") String frontendUrl,
-            @Value("${RESEND_API_KEY:}") String resendApiKey,
-            @Value("${EMAIL_FROM:GT Lost and Found <onboarding@resend.dev>}") String fromAddress
+            @Value("${BREVO_API_KEY:}") String brevoApiKey,
+            @Value("${EMAIL_FROM:}") String fromAddress
     ) {
         this.frontendUrl = frontendUrl.endsWith("/")
                 ? frontendUrl.substring(0, frontendUrl.length() - 1)
                 : frontendUrl;
-        this.resendApiKey = resendApiKey == null ? "" : resendApiKey.trim();
-        this.fromAddress = fromAddress;
+        this.brevoApiKey = brevoApiKey == null ? "" : brevoApiKey.trim();
+
+        // Accepts "Name <address@example.com>" or a bare address.
+        String from = fromAddress == null ? "" : fromAddress.trim();
+        Matcher matcher = NAME_AND_ADDRESS.matcher(from);
+        if (matcher.matches()) {
+            this.senderName = matcher.group(1).isEmpty() ? DEFAULT_SENDER_NAME : matcher.group(1);
+            this.senderEmail = matcher.group(2).trim();
+        } else {
+            this.senderName = DEFAULT_SENDER_NAME;
+            this.senderEmail = from;
+        }
     }
 
     public void sendVerificationEmail(String to, String token) throws MessagingException {
@@ -65,20 +81,24 @@ public class EmailService {
     }
 
     private void send(String to, String subject, String html) throws MessagingException {
-        if (resendApiKey.isEmpty()) {
-            throw new MessagingException("RESEND_API_KEY is not set");
+        if (brevoApiKey.isEmpty()) {
+            throw new MessagingException("BREVO_API_KEY is not set");
+        }
+        if (senderEmail.isEmpty()) {
+            throw new MessagingException("EMAIL_FROM is not set");
         }
 
         String body = "{"
-                + "\"from\":" + json(fromAddress) + ","
-                + "\"to\":[" + json(to) + "],"
+                + "\"sender\":{\"name\":" + json(senderName) + ",\"email\":" + json(senderEmail) + "},"
+                + "\"to\":[{\"email\":" + json(to) + "}],"
                 + "\"subject\":" + json(subject) + ","
-                + "\"html\":" + json(html)
+                + "\"htmlContent\":" + json(html)
                 + "}";
 
-        HttpRequest request = HttpRequest.newBuilder(RESEND_EMAILS_URI)
+        HttpRequest request = HttpRequest.newBuilder(BREVO_EMAILS_URI)
                 .timeout(Duration.ofSeconds(15))
-                .header("Authorization", "Bearer " + resendApiKey)
+                .header("api-key", brevoApiKey)
+                .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
@@ -86,13 +106,13 @@ public class EmailService {
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() / 100 != 2) {
-                throw new MessagingException("Resend returned HTTP " + response.statusCode() + ": " + response.body());
+                throw new MessagingException("Brevo returned HTTP " + response.statusCode() + ": " + response.body());
             }
         } catch (IOException e) {
-            throw new MessagingException("Resend request failed", e);
+            throw new MessagingException("Brevo request failed", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new MessagingException("Resend request was interrupted", e);
+            throw new MessagingException("Brevo request was interrupted", e);
         }
     }
 
