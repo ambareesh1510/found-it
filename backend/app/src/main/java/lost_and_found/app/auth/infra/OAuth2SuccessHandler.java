@@ -1,6 +1,8 @@
 package lost_and_found.app.auth.infra;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +56,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             }
         }
 
-        response.sendRedirect(frontendUrl.replaceAll("/$", "") + "/");
+        // Cross-site browsers can block the cookie, so also pass the token in the URL fragment.
+        // The fragment is never sent to a server, and the frontend removes it from the address bar.
+        String sessionToken = loginResponse.getBody().token();
+        String encoded = URLEncoder.encode(sessionToken, StandardCharsets.UTF_8);
+        response.sendRedirect(frontendUrl.replaceAll("/$", "") + "/#token=" + encoded);
     }
 
 }

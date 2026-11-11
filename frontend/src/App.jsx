@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { tabForPath } from './core/navigation.js';
 import { deleteAccount } from './core/services.js';
-import { restoreSession, startSession, endSession } from './platform/session.js';
+import { restoreSession, startSession, endSession, takeTokenFromUrl } from './platform/session.js';
 import { API_BASE_URL } from './core/config.js';
 import AppTabBar from './ui/AppTabBar';
 import './App.css';
@@ -51,6 +51,9 @@ function AppRoutes({ onLoginSuccess }) {
     const checkSession = async () => {
       try {
         await restoreSession();
+        // After Google sign-in on the web, the backend passes the token in the URL fragment.
+        const tokenFromUrl = takeTokenFromUrl();
+        if (tokenFromUrl) await startSession(tokenFromUrl);
         const userData = await fetchCurrentUser();
         setUser(userData);
       } catch (error) {
