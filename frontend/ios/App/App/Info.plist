@@ -74,13 +74,13 @@
 	<string>Found it uses your location to show items near you and to place your report on the map.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<!-- Google sign-in (native): replace the placeholder with the REVERSED_CLIENT_ID from the iOS OAuth client's GoogleService/OAuth JSON. Sign-in fails until this is real. -->
+	<!-- Google sign-in (native): reversed iOS OAuth client ID, from the iOS client in Google Cloud Console. -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.REPLACE-WITH-IOS-CLIENT-ID</string>
+				<string>com.googleusercontent.apps.846367326926-jrg8mcv6huol1bul6ss0r7hlp544mlt9</string>
 			</array>
 		</dict>
 	</array>

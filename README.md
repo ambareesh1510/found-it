@@ -62,8 +62,10 @@ Minimum variables to review before running:
 - `PROD_HOSTNAME`
 - `GOOGLE_OAUTH2_CLIENT_ID`
 - `GOOGLE_OAUTH2_CLIENT_SECRET`
-- `SUPPORT_EMAIL`
-- `APP_EMAIL_PASSWORD`
+- `GOOGLE_CLIENT_IDS`
+- `NATIVE_ORIGINS`
+- `BREVO_API_KEY`
+- `EMAIL_FROM`
 
 Notes:
 
@@ -124,6 +126,46 @@ If you run the backend outside Docker, make sure PostgreSQL/PostGIS is available
 cd backend/app
 ./mvnw spring-boot:run
 ```
+
+## Deployment
+
+Production uses three hosted services. The backend runs on Render, the database runs on Neon, and account emails go through Brevo. The web frontend is not hosted yet. The iOS app is built with Capacitor and calls the Render backend.
+
+| Part | Service | Notes |
+| --- | --- | --- |
+| Backend | Render (Docker web service) | Builds from this GitHub repo. Free tier sleeps when idle, so the first request can be slow. |
+| Database | Neon (PostgreSQL) | PostGIS is enabled by the init script. |
+| Email | Brevo (HTTPS API) | Render blocks SMTP ports, so email is sent over HTTPS. |
+
+### Backend on Render
+
+1. Create a new Web Service from the GitHub repo.
+2. Set the runtime to Docker, the root directory to `backend`, and the Dockerfile path to `./Dockerfile`.
+3. Add the environment variables from `backend/app/.env.template`. On Render, set `SPRING_PROFILES_ACTIVE=prod`, which uses the ES256 keys. Set `SERVER_PORT=10000`, which the service listens on.
+4. Deploy. Changing an environment variable triggers a new deploy. Check that `GET /items` returns `200`.
+
+Do not copy `.env` files to Render. Enter each value in the Render dashboard.
+
+### Database on Neon
+
+1. Create a Neon project and a database named `lost_and_found`.
+2. In the Neon SQL editor, run `postgres/01-init.sql`, then `postgres/02-timeline-search.sql`. Run them in this order on an empty database.
+3. Set `SPRING_DATASOURCE_URL` to `jdbc:postgresql://<host>/lost_and_found?sslmode=require`. Use the host from Neon. Set `SPRING_DATASOURCE_USERNAME` and `SPRING_DATASOURCE_PASSWORD` to the Neon role's values.
+
+If you reset the Neon password, update `SPRING_DATASOURCE_PASSWORD` on Render and redeploy. Otherwise the backend fails with `password authentication failed`.
+
+### Email on Brevo
+
+1. In Brevo, go to SMTP & API, then API keys, and create a key. It starts with `xkeysib-`. An `xsmtpsib-` key is an SMTP key and gets rejected by the HTTPS API.
+2. In Brevo, go to Senders and verify the sender address.
+3. Set `BREVO_API_KEY` to the API key and `EMAIL_FROM` to `GT Lost and Found <your-verified-address>`.
+
+Verification and password-reset links point at `FRONTEND_URL`. Set it to the frontend URL you use, or to `http://localhost:5173` when testing against a local frontend.
+
+### Frontend
+
+- The iOS build reads `VITE_API_URL`, which should be the Render backend URL. Run `npm run build` and `npx cap sync ios` after changing it, since Vite bakes the value into the bundle.
+- When the web frontend is hosted, set `FRONTEND_URL` and `PROD_HOSTNAME` on Render to its URL.
 
 ## API Summary
 
@@ -201,6 +243,3 @@ Example:
 - The root `package.json` is not the main app entry point; frontend dependencies live in `frontend/package.json`.
 - `frontend/README.md` is outdated and should not be treated as the source of truth.
 - The backend stores auth in an `access_token` HTTP-only cookie.
-
-
-npm run build && npx cap sync ios
