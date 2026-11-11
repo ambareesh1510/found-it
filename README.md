@@ -201,3 +201,6 @@ Example:
 - The root `package.json` is not the main app entry point; frontend dependencies live in `frontend/package.json`.
 - `frontend/README.md` is outdated and should not be treated as the source of truth.
 - The backend stores auth in an `access_token` HTTP-only cookie.
+
+
+npm run build && npx cap sync ios

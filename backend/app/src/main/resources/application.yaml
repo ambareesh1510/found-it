@@ -9,17 +9,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${SUPPORT_EMAIL:dummy@example.com}
-    password: ${APP_EMAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
   security.oauth2.client:

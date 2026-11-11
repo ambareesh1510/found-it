@@ -14,7 +14,7 @@ public class EmailServiceTest extends EmailService {
     private final Map<String, String> resetTokensByEmail = new HashMap<>();
 
     public EmailServiceTest() {
-        super(null, "http://localhost:5173");
+        super("http://localhost:5173", "", "test@example.com");
     }
 
     @Override
