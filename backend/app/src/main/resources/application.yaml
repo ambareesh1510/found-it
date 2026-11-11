@@ -27,7 +27,8 @@ security:
     ec-public-key-pem: ${JWT_ES256_PUBLIC_KEY_PEM}
     hmac-secret-key: ${JWT_HMAC_SECRET_KEY}
     expiration-time: ${JWT_EXPIRATION_TIME} #one day
-    is-prod: false
+    # true on Render: cookies become Secure + SameSite=None so the web frontend on another domain can send them.
+    is-prod: ${JWT_IS_PROD:false}
 hostname:
   dev: ${DEV_HOSTNAME}
   prod: ${PROD_HOSTNAME}
