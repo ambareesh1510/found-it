@@ -36,8 +36,9 @@ hostname:
 app:
   # Base URL of the frontend. Verification and reset links in emails point here.
   frontend-url: ${FRONTEND_URL:${DEV_HOSTNAME}}
-  # Origins the native iOS app's web view sends requests from (Capacitor's default is capacitor://localhost).
-  native-origins: ${NATIVE_ORIGINS:capacitor://localhost}
+  # Origins the native iOS app's web view sends requests from. This project sets ios.scheme to "App" in
+  # capacitor.config.json, so the origin is app://localhost. Set NATIVE_ORIGINS to override.
+  native-origins: ${NATIVE_ORIGINS:app://localhost}
   google:
     # Google client ids that identity tokens may be issued to: the web client and the iOS client. Comma-separated.
     client-ids: ${GOOGLE_CLIENT_IDS:}

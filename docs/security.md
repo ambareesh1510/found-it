@@ -110,17 +110,17 @@ as a security regression.
 
 All secrets come from `backend/app/.env` and `frontend/.env`, which are never committed:
 `SPRING_DATASOURCE_*`, `JWT_HMAC_SECRET_KEY`, `JWT_ES256_PRIVATE_KEY_PEM` /
-`JWT_ES256_PUBLIC_KEY_PEM`, `GOOGLE_OAUTH2_CLIENT_ID` / `_SECRET`, `SUPPORT_EMAIL`,
-`APP_EMAIL_PASSWORD`. Native-app settings (not secret, but required):
-`NATIVE_ORIGINS` (default `capacitor://localhost`), `GOOGLE_CLIENT_IDS` (web and iOS client ids,
+`JWT_ES256_PUBLIC_KEY_PEM`, `GOOGLE_OAUTH2_CLIENT_ID` / `_SECRET`, `BREVO_API_KEY`.
+Native-app settings (not secret, but required): `NATIVE_ORIGINS` (the iOS web view origin, `app://localhost`
+while `ios.scheme` is `App` in `capacitor.config.json`), `EMAIL_FROM` (the verified Brevo sender), `GOOGLE_CLIENT_IDS` (web and iOS client ids,
 comma-separated), `APPLE_BUNDLE_IDS` (the iOS bundle id). Sign in with Apple revocation also needs `APPLE_TEAM_ID`,
 `APPLE_KEY_ID`, and `APPLE_PRIVATE_KEY_PEM` (the `.p8` key contents; a secret). The frontend reads `VITE_API_URL`,
 `VITE_GOOGLE_MAPS_API_KEY`, `VITE_GOOGLE_WEB_CLIENT_ID`, `VITE_GOOGLE_IOS_CLIENT_ID`, and
 `VITE_APPLE_CLIENT_ID` from `frontend/.env`; see `frontend/.env.example`. Replace every
 placeholder before any shared deployment.
 
-The Google Maps key is a browser key, so restrict it by HTTP referrer. Add `capacitor://localhost`
-for the iOS app, or the map will not load there.
+The Google Maps key is a browser key, so restrict it by HTTP referrer. Add the iOS app origin
+(`app://localhost`) for the iOS app, or the map will not load there.
 
 ## Known weaknesses to address before release
 

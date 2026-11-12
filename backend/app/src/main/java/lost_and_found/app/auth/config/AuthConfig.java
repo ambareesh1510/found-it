@@ -36,7 +36,7 @@ public class AuthConfig {
     @Value("${app.frontend-url}")
     private String frontendUrl;
 
-    /** Origins of the native app's web view, e.g. capacitor://localhost. Comma-separated. */
+    /** Origins of the native app's web view, e.g. app://localhost. Comma-separated. */
     @Value("${app.native-origins:}")
     private String nativeOrigins;
 

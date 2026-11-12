@@ -37,7 +37,10 @@ history itself is never stored in PostgreSQL.
 The iOS app is the same React build inside a native shell. It needs a public HTTPS API, because
 the phone cannot reach your laptop's `localhost`. Simulator and device both need this.
 
-1. **Backend.** `NATIVE_ORIGINS` defaults to `capacitor://localhost`, which is correct for the app.
+1. **Backend.** Set `NATIVE_ORIGINS` to the origin the app's web view uses. With `ios.scheme` set to `App`
+   in `capacitor.config.json`, that origin is `app://localhost`. The code default (`capacitor://localhost`)
+   does not match this project. To confirm, run the app and check `window.location.origin` in Safari's
+   Develop menu, under the simulator's app page.
    Also set `GOOGLE_CLIENT_IDS` (the web and iOS OAuth client ids, comma-separated), and `APPLE_BUNDLE_IDS`
    (the bundle id). Deploy it on HTTPS.
    For Sign in with Apple account revocation, also set `APPLE_TEAM_ID`, `APPLE_KEY_ID`, and

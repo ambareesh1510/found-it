@@ -17,7 +17,7 @@ import `jakarta.servlet`.
 ## Interactions
 
 ```
-Browser (React SPA :5173) or iOS app (Capacitor WKWebView, origin capacitor://localhost)
+Browser (React SPA :5173) or iOS app (Capacitor WKWebView, origin app://localhost)
   │  REST: cookie (web) or Authorization: Bearer (iOS)  ──►  Spring Boot :8080  ──►  PostgreSQL/PostGIS :5432
   │  WebSocket /ws/chat?ticket=…   ──►  ChatWebSocketHandler
   └─ Google Maps JS API (browser-side, VITE_GOOGLE_MAPS_API_KEY)
@@ -25,7 +25,7 @@ Browser (React SPA :5173) or iOS app (Capacitor WKWebView, origin capacitor://lo
 Spring Boot also calls out to:
   • Google OAuth2        — federated login (web redirect flow)
   • Google / Apple JWKS  — verifies the ID tokens sent by the native sign-in buttons
-  • Gmail SMTP           — verification + password reset mail
+  • Brevo HTTPS API      — verification + password reset mail
 ```
 
 Auth state is one JWT, delivered two ways. The web app receives it in an `HttpOnly`
