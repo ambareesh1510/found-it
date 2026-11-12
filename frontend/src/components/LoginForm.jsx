@@ -1,6 +1,6 @@
 import { authFetch } from '../core/http.js';
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { API_BASE_URL, NETWORK_ERROR_MESSAGE } from '../core/config.js';
 import { ApiError } from '../core/http.js';
 import { signInWithGoogle, signInWithApple } from '../core/services.js';
@@ -249,6 +249,9 @@ function LoginForm({ onLoginSuccess, onSwitchToRegister, onForgotPassword }) {
           <button type="button" className="auth-link" onClick={onSwitchToRegister}>
             Register
           </button>
+        </p>
+        <p className="auth-footer">
+          <Link to="/privacy" className="auth-link">Privacy policy</Link>
         </p>
       </main>
     </div>

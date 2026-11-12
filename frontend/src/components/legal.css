@@ -1,0 +1,66 @@
+/* Styles for the public Privacy Policy page. */
+
+.legal-page {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 24px 16px;
+  box-sizing: border-box;
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.legal-card {
+  width: 100%;
+  max-width: 720px;
+  padding: 32px 28px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.legal-back {
+  margin: 0 0 16px;
+  font-size: 14px;
+}
+
+.legal-back a,
+.legal-card a {
+  color: #111827;
+  font-weight: 600;
+}
+
+.legal-title {
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.legal-updated {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.legal-card h2 {
+  margin: 24px 0 8px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.legal-card p {
+  margin: 0 0 12px;
+}
+
+.legal-card ul {
+  margin: 0 0 12px;
+  padding-left: 22px;
+}
+
+.legal-card li {
+  margin-bottom: 6px;
+}

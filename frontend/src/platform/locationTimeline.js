@@ -35,6 +35,11 @@ export function setTimelineEnabled(userId, enabled) {
   storage()?.setItem(enabledKey(userId), String(Boolean(enabled)));
 }
 
+/** Deletes the saved timeline points for this user on this device. */
+export function clearTimelineHistory(userId) {
+  storage()?.removeItem(historyKey(userId));
+}
+
 export function getRecentTimelinePoints(userId, now = Date.now()) {
   const retained = readHistory(userId, now);
   writeHistory(userId, retained);

@@ -8,6 +8,7 @@ import { API_BASE_URL } from './core/config.js';
 import AppTabBar from './ui/AppTabBar';
 import './App.css';
 import LoginForm from './components/LoginForm';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import RegisterForm from './components/RegisterForm';
 import ForgotPasswordForm from './components/ForgotPasswordForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
@@ -182,6 +183,8 @@ function AppRoutes({ onLoginSuccess }) {
           {/* Public: opened from the emailed links; works whether or not the user is logged in. */}
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
+          {/* Public: linked from the login page and required by the app stores and Google sign-in. */}
+          <Route path="/privacy" element={<PrivacyPolicy />} />
 
           <Route path="*" element={<Navigate to={user ? '/' : '/login'} replace />} />
         </Routes>

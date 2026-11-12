@@ -6,6 +6,7 @@ import { markItemResolved } from '../core/services.js';
 import './Profile.css';
 import {
   captureTimelinePoint,
+  clearTimelineHistory,
   isTimelineEnabled,
   setTimelineEnabled,
 } from '../platform/locationTimeline';
@@ -49,6 +50,24 @@ function Profile({ user, onLogout, onDeleteAccount }) {
   const [resolveSubmitting, setResolveSubmitting] = useState(false);
   const [timelineEnabled, setTimelineEnabledState] = useState(() => isTimelineEnabled(user?.id));
   const [timelineError, setTimelineError] = useState('');
+
+  const handleTimelineToggle = async () => {
+    const enabled = !timelineEnabled;
+    setTimelineError('');
+    setTimelineEnabled(user.id, enabled);
+    setTimelineEnabledState(enabled);
+    if (!enabled) {
+      clearTimelineHistory(user.id);
+      return;
+    }
+    try {
+      await captureTimelinePoint(user.id, Date.now(), true);
+    } catch (error) {
+      setTimelineEnabled(user.id, false);
+      setTimelineEnabledState(false);
+      setTimelineError(error.message || 'Location access could not be enabled.');
+    }
+  };
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState('');
@@ -273,29 +292,21 @@ function Profile({ user, onLogout, onDeleteAccount }) {
         return (
           <div className="tab-content">
             <h2>Settings</h2>
-            <label className="skip-label">
-              <input
-                type="checkbox"
-                checked={timelineEnabled}
-                onChange={async (event) => {
-                  const enabled = event.target.checked;
-                  setTimelineError('');
-                  setTimelineEnabled(user.id, enabled);
-                  setTimelineEnabledState(enabled);
-                  if (enabled) {
-                    try {
-                      await captureTimelinePoint(user.id, Date.now(), true);
-                    } catch (error) {
-                      setTimelineEnabled(user.id, false);
-                      setTimelineEnabledState(false);
-                      setTimelineError(error.message || 'Location access could not be enabled.');
-                    }
-                  }
-                }}
-              />
-              <span>Location Access</span>
-            </label>
-            <p>Records coarse locations every five minutes while FindIt is open. History stays on this device for seven days.</p>
+            <div className="timeline-setting">
+              <div>
+                <p className="timeline-setting__title">Timeline</p>
+                <p className="timeline-setting__status">{timelineEnabled ? 'On' : 'Off'}</p>
+              </div>
+              <button
+                type="button"
+                className="timeline-toggle-btn"
+                aria-pressed={timelineEnabled}
+                onClick={handleTimelineToggle}
+              >
+                {timelineEnabled ? 'Turn off' : 'Turn on'}
+              </button>
+            </div>
+            <p>Records coarse locations every five minutes while FindIt is open. History stays on this device for seven days. Turning Timeline off deletes the saved history.</p>
             {timelineError && <p className="items-message error" role="alert">{timelineError}</p>}
             
             {onDeleteAccount && (

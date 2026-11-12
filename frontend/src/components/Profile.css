@@ -421,6 +421,42 @@
   border-radius: 8px;
 }
 
+.timeline-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.timeline-setting__title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.timeline-setting__status {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.timeline-toggle-btn {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #111827;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.timeline-toggle-btn:hover {
+  background-color: #f9fafb;
+}
+
 .skip-label {
   display: flex;
   align-items: center;
