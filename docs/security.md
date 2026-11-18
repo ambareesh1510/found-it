@@ -112,7 +112,7 @@ All secrets come from `backend/app/.env` and `frontend/.env`, which are never co
 `SPRING_DATASOURCE_*`, `JWT_HMAC_SECRET_KEY`, `JWT_ES256_PRIVATE_KEY_PEM` /
 `JWT_ES256_PUBLIC_KEY_PEM`, `GOOGLE_OAUTH2_CLIENT_ID` / `_SECRET`, `BREVO_API_KEY`.
 Native-app settings (not secret, but required): `NATIVE_ORIGINS` (the iOS web view origin, `app://localhost`
-while `ios.scheme` is `App` in `capacitor.config.json`), `EMAIL_FROM` (the verified Brevo sender), `GOOGLE_CLIENT_IDS` (web and iOS client ids,
+while `server.iosScheme` is `app` in `capacitor.config.json`), `EMAIL_FROM` (the verified Brevo sender), `GOOGLE_CLIENT_IDS` (web and iOS client ids,
 comma-separated), `APPLE_BUNDLE_IDS` (the iOS bundle id). Sign in with Apple revocation also needs `APPLE_TEAM_ID`,
 `APPLE_KEY_ID`, and `APPLE_PRIVATE_KEY_PEM` (the `.p8` key contents; a secret). The frontend reads `VITE_API_URL`,
 `VITE_GOOGLE_MAPS_API_KEY`, `VITE_GOOGLE_WEB_CLIENT_ID`, `VITE_GOOGLE_IOS_CLIENT_ID`, and

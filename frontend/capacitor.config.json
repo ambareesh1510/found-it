@@ -2,8 +2,16 @@
   "appId": "com.gtcapstone.foundit",
   "appName": "Found it",
   "webDir": "dist",
+  "server": {
+    "iosScheme": "app",
+    "hostname": "localhost"
+  },
   "ios": {
-    "contentInset": "never",
-    "scheme": "App"
+    "contentInset": "never"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
   }
 }

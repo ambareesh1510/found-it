@@ -2,9 +2,11 @@ package lost_and_found.app;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.AfterEach;
@@ -70,6 +72,21 @@ class JwtAuthFilterTest {
         request.addHeader("Authorization", "Bearer " + ticket);
 
         assertNull(authenticatedUsernameFor(request));
+    }
+
+    @Test
+    void anExpiredTokenLetsTheRequestContinue() throws Exception {
+        String secret = Base64.getEncoder().encodeToString(
+            "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef".getBytes(StandardCharsets.UTF_8));
+        JwtService expiredTokens = new HS256JwtService(new BlacklistServiceTest(), secret, -1_000L);
+        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/auth/login");
+        request.addHeader("Authorization", "Bearer " + expiredTokens.generateToken(alice));
+
+        AtomicBoolean continued = new AtomicBoolean(false);
+        filter.doFilter(request, new MockHttpServletResponse(), (req, res) -> continued.set(true));
+
+        assertTrue(continued.get());
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
 
     @Test

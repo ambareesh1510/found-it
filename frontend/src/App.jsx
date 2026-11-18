@@ -59,6 +59,8 @@ function AppRoutes({ onLoginSuccess }) {
         setUser(userData);
       } catch (error) {
         console.error("Session check failed.", error);
+        // Drop the saved token. An expired one is sent on the next sign-in and the server rejects it.
+        await endSession();
       } finally {
         setLoading(false);
       }

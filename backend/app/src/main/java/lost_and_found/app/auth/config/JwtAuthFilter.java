@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import io.jsonwebtoken.JwtException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,7 +72,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 return;
             }
 
-            final String username = jwtService.extractUsername(jwt);
+            final String username;
+            try {
+                username = jwtService.extractUsername(jwt);
+            } catch (JwtException e) {
+                // Expired or invalid tokens are ignored so they cannot turn login into a 500.
+                filterChain.doFilter(request, response);
+                return;
+            }
             // A WebSocket ticket only opens the chat socket. It never authenticates an API call.
             if (username != null && !WsTicketService.isTicket(jwtService, jwt)) {
                 final UserDetails userDetails;

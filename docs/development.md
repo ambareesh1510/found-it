@@ -37,9 +37,9 @@ history itself is never stored in PostgreSQL.
 The iOS app is the same React build inside a native shell. It needs a public HTTPS API, because
 the phone cannot reach your laptop's `localhost`. Simulator and device both need this.
 
-1. **Backend.** Set `NATIVE_ORIGINS` to the origin the app's web view uses. With `ios.scheme` set to `App`
-   in `capacitor.config.json`, that origin is `app://localhost`. The code default (`capacitor://localhost`)
-   does not match this project. To confirm, run the app and check `window.location.origin` in Safari's
+1. **Backend.** Set `NATIVE_ORIGINS` to the origin the app's web view uses. Capacitor reads `server.iosScheme`
+   in `capacitor.config.json` (not `ios.scheme`). With that set to `app`, the origin is `app://localhost`.
+   If the key is missing, Capacitor uses `capacitor://localhost`, and the API calls fail CORS. To confirm, run the app and check `window.location.origin` in Safari's
    Develop menu, under the simulator's app page.
    Also set `GOOGLE_CLIENT_IDS` (the web and iOS OAuth client ids, comma-separated), and `APPLE_BUNDLE_IDS`
    (the bundle id). Deploy it on HTTPS.
@@ -53,6 +53,9 @@ the phone cannot reach your laptop's `localhost`. Simulator and device both need
    cd frontend && npm run build && npx cap sync ios
    ```
    `cap sync` copies `dist/` into `ios/App/App/public` and updates the Swift Package list.
+   `CapacitorHttp` is enabled in `capacitor.config.json` so API calls use native networking.
+   The iOS web view's own `fetch` fails those calls (`ApiError` status 0, "Could not reach the server")
+   even when the server is up.
 4. **Xcode.** `npx cap open ios`, then:
    - Set your Team under Signing & Capabilities, and change the bundle id to a real one in
      both Xcode and `capacitor.config.json` (`appId` is a placeholder, `com.gtcapstone.foundit`).
