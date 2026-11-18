@@ -319,6 +319,29 @@
   gap: 6px;
 }
 
+.flow-map-preview {
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--color-text);
+}
+
+.flow-map-preview .flow-result__image {
+  width: 150px;
+  height: 96px;
+}
+
+.flow-map-preview strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.flow-map-preview span {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
 .flow-map-dot {
   width: 10px;
   height: 10px;

@@ -50,6 +50,7 @@ export default function LostResultsPage() {
           selectedItemId={selectedItemId}
           onSelectItem={(itemId) => {
             setSelectedItemId(itemId);
+            if (itemId === null) return;
             globalThis.requestAnimationFrame?.(() => {
               globalThis.document?.getElementById(`search-result-${itemId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             });

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CircleF, GoogleMap, MarkerF, PolylineF, useJsApiLoader } from '@react-google-maps/api';
+import { CircleF, GoogleMap, InfoWindowF, MarkerF, PolylineF, useJsApiLoader } from '@react-google-maps/api';
 import { SEARCH_RADIUS_METERS } from '../../core/lostSearch';
+import ItemPhoto from '../../ui/ItemPhoto';
 
 const MAP_LOADER_ID = 'lost-and-found-google-map';
 const GOOGLE_MAP_LIBRARIES = ['places'];
@@ -33,6 +34,7 @@ export default function LostResultsMap({ declaration, results, timelinePoints, s
   );
   const manualCenter = declaration.useTimeline ? null : toPosition(declaration.location);
   const initialCenter = manualCenter || timelinePath.at(-1) || resultMarkers[0]?.position || DEFAULT_CENTER;
+  const selectedMarker = resultMarkers.find(({ item }) => item.itemId === selectedItemId) || null;
 
   useEffect(() => {
     if (!map || !globalThis.google?.maps) return;
@@ -114,6 +116,20 @@ export default function LostResultsMap({ declaration, results, timelinePoints, s
             }}
           />
         ))}
+
+        {selectedMarker && (
+          <InfoWindowF
+            position={selectedMarker.position}
+            onCloseClick={() => onSelectItem(null)}
+            options={{ pixelOffset: new globalThis.google.maps.Size(0, -12) }}
+          >
+            <div className="flow-map-preview">
+              <ItemPhoto src={selectedMarker.item.imageUrl} alt={selectedMarker.item.title} />
+              <strong>{selectedMarker.item.title}</strong>
+              <span>{selectedMarker.item.locationText || 'Approximate found location'}</span>
+            </div>
+          </InfoWindowF>
+        )}
       </GoogleMap>
       <div className="flow-results-map__legend">
         <span><i className="flow-map-dot flow-map-dot--search" />{declaration.useTimeline ? 'Your Timeline' : 'Search area'}</span>

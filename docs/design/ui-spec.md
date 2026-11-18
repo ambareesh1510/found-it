@@ -78,8 +78,8 @@ the finder list below, minus the reward chip.
 
 A map appears above the cards and contains only matching reports from the recorded search.
 Found-item markers use approximate coordinates. A manual search shows its declared point
-and radius; a Timeline search draws the submitted Timeline path. Selecting a marker scrolls
-to and highlights its result card. Missing Maps configuration and load failures render
+and radius; a Timeline search draws the submitted Timeline path. Selecting a marker opens
+an image-and-title preview, scrolls to its result card, and highlights that card. Missing Maps configuration and load failures render
 inline rather than hiding the results.
 
 ### Report Lost form
