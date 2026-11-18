@@ -48,13 +48,7 @@ export default function LostResultsPage() {
           results={results}
           timelinePoints={timelinePoints}
           selectedItemId={selectedItemId}
-          onSelectItem={(itemId) => {
-            setSelectedItemId(itemId);
-            if (itemId === null) return;
-            globalThis.requestAnimationFrame?.(() => {
-              globalThis.document?.getElementById(`search-result-${itemId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
-          }}
+          onSelectItem={setSelectedItemId}
         />
 
         {contactError && (
