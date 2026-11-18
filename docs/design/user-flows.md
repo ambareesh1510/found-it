@@ -38,7 +38,7 @@ Home ──tap "I Lost an Item"──► Step 1: category
                                   └─ or: "Search along my Timeline"
                                   │ tap "Search Found Items"
                                   ▼        (declaration persisted here)
-                               Results: FOUND posts matching category + radius + window
+                               Results map + cards: FOUND posts matching category + radius + window
                                   ├─ tap a card ──► found-item detail ──► Contact ──► Messages
                                   └─ tap "+ Report Lost" ──► Report Lost form ──► my LOST post
 ```
@@ -59,6 +59,10 @@ Rules:
   from the previous 24 hours and matches within 0.5 miles; the server does not retain them.
 - Results show non-identifying fields only. Zero results shows the empty state with
   `+ Report Lost` still available.
+- Results include a map of matching found-item locations using approximate, rounded
+  coordinates. Manual searches show the declared point and radius. Timeline searches draw
+  the submitted device-local points as a path; those points remain transient and are not
+  stored by the backend.
 - `Report Lost` prefills category, location, date, and time from the declaration. Photo
   is optional.
 
@@ -109,3 +113,5 @@ contact details from public listings.
   the "filter/search the found item list" user stories in the Iteration Plan are
   superseded by it.
 - Messages reached only from within a side. Messages is now a top-level tab.
+- The global Map tab and browsable all-item map. Maps now appear only after a recorded
+  lost-item declaration and contain only that search's matching found reports.

@@ -69,7 +69,9 @@ The redesign's security property is procedural, not cryptographic:
 2. Results are filtered server-side; the client never receives non-matching posts.
 3. Found-item listings withhold precise detail until contact is established — the
    `detail_location` field and the second photo are the finder's verification secret and
-   must not appear in list responses.
+   must not appear in list responses. Declaration-gated search results may include
+   coordinates rounded to three decimal places for approximate map markers; exact
+   coordinates remain withheld.
 4. A finder reviewing a claim can compare it against the claimant's recorded search.
 
 Any change that lets a client enumerate found items, or that returns
