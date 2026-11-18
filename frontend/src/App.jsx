@@ -14,7 +14,6 @@ import ForgotPasswordForm from './components/ForgotPasswordForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import VerifyEmail from './components/VerifyEmail';
 import Profile from './components/Profile';
-import List from './components/List';
 import CreateItem from './components/CreateItem';
 import ItemDetail from './components/ItemDetail';
 import Chat from './components/Chat';
@@ -112,11 +111,8 @@ function AppRoutes({ onLoginSuccess }) {
             element={user ? <HomePage user={user} /> : <Navigate to="/login" />}
           />
 
-          {/* Map feed (the earlier home screen), kept reachable while the new flows settle. */}
-          <Route
-            path="/map"
-            element={user ? <List user={user} /> : <Navigate to="/login" />}
-          />
+          {/* The former global item map is intentionally gone; maps are declaration-gated search results. */}
+          <Route path="/map" element={<Navigate to={user ? '/' : '/login'} replace />} />
 
           {/* I Lost an Item */}
           <Route path="/lost" element={user ? <LostCategoryPage /> : <Navigate to="/login" />} />

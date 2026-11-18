@@ -1,11 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TABS } from '../core/navigation.js';
-import { IconHome, IconMap, IconMessage, IconUser } from './icons';
+import { IconHome, IconMessage, IconUser } from './icons';
 import './tabBar.css';
 
 const ICONS = {
   home: IconHome,
-  map: IconMap,
   messages: IconMessage,
   profile: IconUser,
 };
