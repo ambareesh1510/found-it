@@ -59,7 +59,13 @@ export default function LostWhereWhenPage({ user }) {
         throw new Error('No Timeline locations are available from the previous 24 hours. Keep FindIt open to record one.');
       }
       const result = await runLostSearch(payload);
-      navigate('/lost/results', { state: { declaration: { ...declaration, useTimeline: mode === 'timeline' }, result } });
+      navigate('/lost/results', {
+        state: {
+          declaration: { ...declaration, useTimeline: mode === 'timeline' },
+          result,
+          timelinePoints: mode === 'timeline' ? payload.timelinePoints : [],
+        },
+      });
     } catch (err) {
       setSearchError(err.message || 'The search did not finish. Please try again.');
       setSubmitting(false);

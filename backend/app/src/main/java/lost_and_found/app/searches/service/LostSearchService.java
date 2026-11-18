@@ -152,7 +152,13 @@ public class LostSearchService {
             item.getCategory(),
             item.getImageUrl(),
             item.getLocationText(),
+            roundCoordinate(item.getLocation().getY()),
+            roundCoordinate(item.getLocation().getX()),
             item.getEventTime()
         );
+    }
+
+    private double roundCoordinate(double coordinate) {
+        return Math.round(coordinate * 1000.0) / 1000.0;
     }
 }

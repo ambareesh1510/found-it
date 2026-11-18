@@ -9,12 +9,11 @@ toggle at the bottom of the home screen.
 ## Shell
 
 Mobile-first, ~390 px design width, single column, safe-area padded. A persistent bottom
-tab bar with four destinations is present on top-level screens:
+tab bar with three destinations is present on top-level screens:
 
 | Tab | Contents |
 | --- | --- |
 | **Items** | Home, both report flows, search results. Default tab. |
-| **Map** | Map view of reports. |
 | **Messages** | Conversation list. Shows an unread-count badge (red pill, e.g. `3`). |
 | **Settings** | Privacy, location, and notification toggles. |
 
@@ -76,6 +75,12 @@ Header `Found item reports / I Lost an Item`. A count line (`0 matching found it
 sits left of a red **+ Report Lost** button. Empty state is a box illustration with
 "No items found" and "Try adjusting your search". Result cards use the same anatomy as
 the finder list below, minus the reward chip.
+
+A map appears above the cards and contains only matching reports from the recorded search.
+Found-item markers use approximate coordinates. A manual search shows its declared point
+and radius; a Timeline search draws the submitted Timeline path. Selecting a marker opens
+an image-and-title preview and highlights its result card. Missing Maps configuration and load failures render
+inline rather than hiding the results.
 
 ### Report Lost form
 ![Report lost](screens/05-report-lost-form.png)

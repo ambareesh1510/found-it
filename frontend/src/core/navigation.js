@@ -3,7 +3,6 @@
 export const TABS = Object.freeze([
   // The Home tab also owns the lost and found flows, so those screens keep the tab highlighted.
   { id: 'home', label: 'Home', path: '/', sectionPrefixes: ['/lost', '/found'] },
-  { id: 'map', label: 'Map', path: '/map', sectionPrefixes: [] },
   { id: 'messages', label: 'Messages', path: '/chat', sectionPrefixes: [] },
   { id: 'profile', label: 'Profile', path: '/profile', sectionPrefixes: [] },
 ]);

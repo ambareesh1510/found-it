@@ -121,8 +121,10 @@ point from the previous 24 hours. Submitted points are used only for the request
 never persisted. The saved declaration has a null `location` and `usedTimeline: true`.
 
 `FoundItemSummaryDTO` is deliberately narrow: `itemId`, `title`, `description`, `category`,
-`imageUrl`, `locationText`, `eventTime`. It omits `detailLocation`, coordinates, and poster
-identity, so a loser cannot reach a finder before a claim is made.
+`imageUrl`, `locationText`, `latitude`, `longitude`, `eventTime`. Coordinates are rounded
+to three decimal places and are returned only by this declaration-gated endpoint so the
+results map can place an approximate marker. It omits exact coordinates, `detailLocation`,
+`imageUrl2`, and poster identity.
 
 ## Endpoints the redesign requires — not yet built
 

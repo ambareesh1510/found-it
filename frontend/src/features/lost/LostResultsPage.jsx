@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import FlowHeader from '../../ui/FlowHeader';
 import ItemPhoto from '../../ui/ItemPhoto';
 import { formatEventTime } from '../../core/eventTime';
 import { useContactPoster } from '../found/useContactPoster';
+import LostResultsMap from './LostResultsMap';
 
 /**
  * Results of "I Lost an Item". Reads the search from router state. If the page is opened
@@ -13,12 +15,13 @@ export default function LostResultsPage() {
   const { state } = useLocation();
   // Hooks must run before the early return below.
   const { contactingId, error: contactError, contact } = useContactPoster();
+  const [selectedItemId, setSelectedItemId] = useState(null);
 
   if (!state?.result) {
     return <Navigate to="/lost" replace />;
   }
 
-  const { declaration, result } = state;
+  const { declaration, result, timelinePoints = [] } = state;
   const results = result.results ?? [];
   const count = results.length;
 
@@ -40,6 +43,14 @@ export default function LostResultsPage() {
           {count === 0 ? 'No matching found items yet.' : `${count} matching found item${count === 1 ? '' : 's'}`}
         </p>
 
+        <LostResultsMap
+          declaration={declaration}
+          results={results}
+          timelinePoints={timelinePoints}
+          selectedItemId={selectedItemId}
+          onSelectItem={setSelectedItemId}
+        />
+
         {contactError && (
           <div className="flow-banner flow-banner--danger" role="alert">
             {contactError}
@@ -54,7 +65,11 @@ export default function LostResultsPage() {
         )}
 
         {results.map((item) => (
-          <article key={item.itemId} className="flow-result">
+          <article
+            id={`search-result-${item.itemId}`}
+            key={item.itemId}
+            className={`flow-result${selectedItemId === item.itemId ? ' flow-result--selected' : ''}`}
+          >
             <ItemPhoto src={item.imageUrl} alt={item.title} />
             <div className="flow-result__body">
               <span className="flow-chip">{item.category}</span>

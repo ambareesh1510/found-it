@@ -2,16 +2,16 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { TABS, tabForPath } from '../navigation.js';
 
-test('the four tabs are Home, Map, Messages, Profile in that order', () => {
+test('the three tabs are Home, Messages, Profile in that order', () => {
   assert.deepEqual(
     TABS.map((tab) => tab.label),
-    ['Home', 'Map', 'Messages', 'Profile'],
+    ['Home', 'Messages', 'Profile'],
   );
 });
 
 test('each tab root maps to its own tab', () => {
   assert.equal(tabForPath('/').id, 'home');
-  assert.equal(tabForPath('/map').id, 'map');
+  assert.equal(tabForPath('/map'), null);
   assert.equal(tabForPath('/chat').id, 'messages');
   assert.equal(tabForPath('/profile').id, 'profile');
 });
@@ -25,7 +25,7 @@ test('lost and found flow screens belong to the Home tab', () => {
 });
 
 test('trailing slashes do not change the tab', () => {
-  assert.equal(tabForPath('/map/').id, 'map');
+  assert.equal(tabForPath('/map/'), null);
   assert.equal(tabForPath('/profile/').id, 'profile');
 });
 

@@ -69,7 +69,7 @@ The frontend is split so that a Capacitor/iOS build can reuse most of it unchang
 | `src/theme/`, `src/ui/` | Design tokens (`tokens.css`), flow styles (`flows.css`), presentational components | No API calls. Props in, markup out. |
 | `src/features/<flow>/` | Screens: `home`, `lost`, `found`, `reports` | Compose `core` + `ui` + `platform`. Must not call `fetch` directly. |
 
-Top-level navigation: `core/navigation.js` defines the four tabs (Home, Map, Messages, Profile) and maps a path to its tab (`tabForPath`). `ui/AppTabBar.jsx` renders the bar, and `App.jsx` shows it only for signed-in users on a tab section (item detail, create/edit, and auth screens have no bar). A native iOS tab bar can read the same `TABS` list.
+Top-level navigation: `core/navigation.js` defines the three tabs (Home, Messages, Profile) and maps a path to its tab (`tabForPath`). `ui/AppTabBar.jsx` renders the bar, and `App.jsx` shows it only for signed-in users on a tab section (item detail, create/edit, and auth screens have no bar). A native iOS tab bar can read the same `TABS` list. The former global map is removed; the lost-search results screen maps only declaration-gated matches.
 
 Rules for new code:
 
