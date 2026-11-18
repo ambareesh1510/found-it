@@ -68,6 +68,7 @@ export default function LostResultsMap({ declaration, results, timelinePoints, s
         zoom={15}
         onLoad={setMap}
         onUnmount={() => setMap(null)}
+        onClick={() => onSelectItem(null)}
         options={{ streetViewControl: false, mapTypeControl: false, fullscreenControl: false }}
       >
         {manualCenter && (
