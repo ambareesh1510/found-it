@@ -95,6 +95,8 @@ class LostSearchServiceTest {
 
         assertEquals(1, result.results().size());
         assertEquals("Black wallet", result.results().get(0).title());
+        assertEquals(33.776, result.results().get(0).latitude());
+        assertEquals(-84.396, result.results().get(0).longitude());
         assertEquals(1, savedSearches.size(), "declaration must be persisted before results are returned");
         assertEquals("Wallet", savedSearches.get(0).getCategory());
         assertEquals(result.searchId(), savedSearches.get(0).getId());
