@@ -85,8 +85,19 @@ as a security regression.
 - Timeline search sends only points from the previous 24 hours. The backend uses them
   transiently for PostGIS matching and never persists them; only the declaration metadata is
   stored. There is no timeline read endpoint or cross-user view.
-- **Private Profile** (Settings) hides name and contact info from public listings; honor
-  it in every DTO that serializes `posterUsername` or contact fields.
+- **Found-match email alerts carry no found-item detail.** When a FOUND item is posted,
+  `FoundMatchNotifier` emails the owners of open LOST reports it matches (same category, within
+  1 mile), but only if both `found_item_matches` and `email_updates` are on. The email contains
+  nothing about the found item — no category, photo, location, or poster — only the recipient's
+  own report title and a link back into the declared-search flow. This keeps the alert from
+  becoming a side channel around the anti-false-claim gate. Any change to the email body must
+  preserve this; `EmailServiceContentTest` guards it.
+- **Private Profile** (Settings, default off) hides the user's name from public listings.
+  Enforced server-side in `ItemMapper` (a non-owner viewer gets `posterUsername = null`) and in
+  `GET /users/{id}` (username withheld from anyone but the user). The poster id is kept so chat
+  and claims still route. `FoundItemSummaryDTO` already omits poster identity entirely, so lost
+  searches are unaffected. _Gap: honor it anywhere else a username is later serialized (e.g. chat
+  participant previews) — chat identity after contact is intentionally still shown._
 - Item photos may contain faces, plates, or documents. Never make the upload bucket
   publicly listable.
 - **Account deletion (`DELETE /users/me`) anonymizes; it does not hard-delete.** `AccountService`

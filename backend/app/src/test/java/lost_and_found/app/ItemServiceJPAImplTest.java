@@ -33,6 +33,7 @@ class ItemServiceJPAImplTest {
     private TestItemPostRepository itemPostRepository;
     private PointUtil pointUtil;
     private ItemMapper itemMapper;
+    private java.util.List<String> notifiedCategories;
 
     @BeforeEach
     void setUp() {
@@ -40,13 +41,41 @@ class ItemServiceJPAImplTest {
         itemPostRepository = new TestItemPostRepository();
         pointUtil = new PointUtil();
         itemMapper = new ItemMapper();
+        notifiedCategories = new java.util.ArrayList<>();
+
+        // Records invocations instead of running the match query / sending email.
+        lost_and_found.app.items.service.FoundMatchNotifier notifier =
+            new lost_and_found.app.items.service.FoundMatchNotifier(null, null, null) {
+                @Override
+                public void notifyForFoundItem(String category, org.locationtech.jts.geom.Point location, Long finderUserId) {
+                    notifiedCategories.add(category);
+                }
+            };
 
         itemService = new ItemServiceJPAImpl(
             userRepository,
             itemPostRepository,
             pointUtil,
-            itemMapper
+            itemMapper,
+            notifier
         );
+    }
+
+    @Test
+    void createItem_notifiesForFoundPostsOnly() throws Exception {
+        User finder = saveUser("finder2", "finder2@test.com");
+        CreateItemDTO lost = new CreateItemDTO(
+            "Keys", "k", "Keys", "https://x/i.jpg", null, 33.77, -84.39,
+            "Clough", null, Instant.parse("2026-03-14T10:00:00Z"), PostType.LOST, null);
+        CreateItemDTO found = new CreateItemDTO(
+            "Keys", "k", "Keys", "https://x/i.jpg", null, 33.77, -84.39,
+            "Clough", null, Instant.parse("2026-03-14T10:00:00Z"), PostType.FOUND, null);
+
+        itemService.createItem(finder.getId(), lost);
+        itemService.createItem(finder.getId(), found);
+
+        assertEquals(java.util.List.of("Keys"), notifiedCategories,
+            "the match notifier fires for FOUND posts only");
     }
 
     @Test

@@ -92,6 +92,18 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "claimantUser", fetch = FetchType.LAZY)
     private List<ItemClaim> claims;
 
+    /** Per-user preference toggles; may be null until the user first opens Settings. */
+    @jakarta.persistence.OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private UserSettings settings;
+
+    /**
+     * Whether this user has hidden their name/contact from public listings. Null-safe:
+     * a user with no settings row yet is treated as not private (the default).
+     */
+    public boolean isPrivateProfile() {
+        return settings != null && settings.isPrivateProfile();
+    }
+
     @PrePersist
     public void prePersist() {
         Instant now = Instant.now();

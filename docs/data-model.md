@@ -63,6 +63,15 @@ Always normalize the pair before inserting.
 ### `jwt_token_blacklist`
 `id` · `jti` unique · `username` → `users.username` · `blacklisted_at`. Written on logout.
 
+### `user_settings` (built)
+One row per user, created lazily the first time the user opens Settings. `user_id` is both
+PK and FK → `users(id)` `ON DELETE CASCADE`. Seven boolean toggles with the prototype
+defaults: `location_access` (true), `private_profile` (false), `push_notifications` (true),
+`lost_item_alerts` (true), `found_item_matches` (true), `notification_sound` (true),
+`email_updates` (false). `private_profile` is enforced server-side: when true, the user's
+`posterUsername` is withheld from non-owner viewers in item responses and in `GET /users/{id}`.
+The notification toggles are stored preferences only — no push/email is sent yet.
+
 ## Relationships
 
 ```
@@ -72,11 +81,9 @@ users 1──* item_posts
       └──* jwt_token_blacklist
 ```
 
-## Additions required by the redesign — not yet built
+## Additions required by the redesign
 
-| Addition | Why |
-| --- | --- |
-| `user_settings` | Settings screen toggles: location access, private profile, push/lost-alert/found-match/sound/email notification preferences. |
-
-Each of these is a schema change, so none can land before migration tooling exists
-([task-001](tasks/task-001-schema-migrations.md)).
+All redesign tables are now built (`lost_searches`, `user_settings`, and `item_posts.reward_cents`).
+These still landed as raw `postgres/*.sql` plus `ddl-auto: update`, because migration tooling does
+not exist yet ([task-001](tasks/task-001-schema-migrations.md)); `user_settings` lives in
+`postgres/03-user-settings.sql` and is created from the entity on existing databases.

@@ -557,3 +557,181 @@
   background-color: #ffffff;
   color: #111827;
 }
+
+/* ---- Settings: grouped toggle rows (task-004) ---- */
+.settings-group {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 4px 16px;
+  margin-bottom: 20px;
+}
+
+.settings-group__title {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+  color: #888;
+  margin: 14px 0 6px;
+}
+
+.settings-group__note {
+  font-size: 0.8rem;
+  color: #999;
+  margin: 6px 0 14px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid #f0f0f0;
+}
+.setting-row:first-of-type {
+  border-top: none;
+}
+
+.setting-row__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.setting-row__label {
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 2px;
+}
+
+.setting-row__desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Accessible on/off switch. Hit area is at least 44px tall for touch (AGENTS #8). */
+.switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 30px;
+  border-radius: 15px;
+  background: #ccc;
+  transition: background 0.15s ease;
+}
+.switch--on::before {
+  background: #000;
+}
+.switch__knob {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: left 0.15s ease;
+}
+.switch--on .switch__knob {
+  left: 25px;
+}
+.switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.switch:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+  border-radius: 15px;
+}
+
+/* ---- My Profile: details + inline edit (task-004) ---- */
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.profile-details__avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #000;
+}
+.profile-details__list {
+  margin: 0;
+  width: 100%;
+  max-width: 420px;
+}
+.profile-details__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.profile-details__row dt {
+  color: #888;
+  font-size: 0.85rem;
+}
+.profile-details__row dd {
+  margin: 0;
+  color: #111;
+  font-weight: 600;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.profile-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+}
+.profile-edit__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.profile-edit__field span {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 600;
+}
+.profile-edit__field input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  min-height: 44px;
+}
+.profile-edit__field input:focus {
+  outline: none;
+  border-color: #000;
+}
+.profile-edit__note {
+  font-size: 0.8rem;
+  color: #999;
+  margin: 0;
+}
+.profile-edit__actions {
+  display: flex;
+  gap: 12px;
+}

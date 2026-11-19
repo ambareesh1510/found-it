@@ -33,4 +33,24 @@ public interface ItemPostRepository extends JpaRepository<ItemPost, Long>, JpaSp
         @Param("center") Point center,
         @Param("radiusMeters") double radiusMeters
     );
+
+    /**
+     * Open LOST reports a newly posted FOUND item may match: same category, within {@code radiusMeters},
+     * excluding the finder's own posts. Used to decide who to email (see FoundMatchNotifier).
+     */
+    @Query(value = """
+        SELECT *
+        FROM item_posts ip
+        WHERE ip.post_type = 'LOST'
+          AND ip.status = 'OPEN'
+          AND lower(ip.category) = lower(:category)
+          AND ip.user_id <> :finderUserId
+          AND ST_DWithin(ip.location, :center, :radiusMeters)
+        """, nativeQuery = true)
+    List<ItemPost> findMatchingLostReports(
+        @Param("category") String category,
+        @Param("center") Point center,
+        @Param("radiusMeters") double radiusMeters,
+        @Param("finderUserId") Long finderUserId
+    );
 }

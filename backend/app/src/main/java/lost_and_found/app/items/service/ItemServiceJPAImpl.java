@@ -30,17 +30,20 @@ public class ItemServiceJPAImpl implements ItemService {
     private final ItemPostRepository itemPostRepository;
     private final PointUtil pointUtil;
     private final ItemMapper itemMapper;
+    private final FoundMatchNotifier foundMatchNotifier;
 
     public ItemServiceJPAImpl(
         UserRepository userRepository,
         ItemPostRepository itemPostRepository,
         PointUtil pointUtil,
-        ItemMapper itemMapper
+        ItemMapper itemMapper,
+        FoundMatchNotifier foundMatchNotifier
     ) {
         this.userRepository = userRepository;
         this.itemPostRepository = itemPostRepository;
         this.pointUtil = pointUtil;
         this.itemMapper = itemMapper;
+        this.foundMatchNotifier = foundMatchNotifier;
     }
 
     @Transactional
@@ -69,6 +72,12 @@ public class ItemServiceJPAImpl implements ItemService {
         item.setRewardCents(item.getPostType() == PostType.LOST ? req.rewardCents() : null);
 
         ItemPost saved = itemPostRepository.save(item);
+
+        // Email owners of open LOST reports this FOUND item may match (async; never blocks creation).
+        if (saved.getPostType() == PostType.FOUND) {
+            foundMatchNotifier.notifyForFoundItem(saved.getCategory(), saved.getLocation(), userId);
+        }
+
         // The poster is the viewer here, so they receive their own detailLocation.
         return itemMapper.toResponse(saved, userId);
     }

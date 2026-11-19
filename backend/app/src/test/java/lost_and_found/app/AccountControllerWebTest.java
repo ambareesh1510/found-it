@@ -23,10 +23,13 @@ import lost_and_found.app.shared.domain.User;
 import lost_and_found.app.shared.infra.GlobalExceptionHandler;
 import lost_and_found.app.shared.infra.UserController;
 import lost_and_found.app.shared.service.AccountService;
+import lost_and_found.app.shared.service.ProfileService;
+import lost_and_found.app.shared.service.SettingsService;
 import lost_and_found.app.test_implementations.BlacklistServiceTest;
 import lost_and_found.app.test_implementations.FakeAppleTokens;
 import lost_and_found.app.test_implementations.Fakes;
 import lost_and_found.app.test_implementations.UserRepositoryTest;
+import lost_and_found.app.test_implementations.UserSettingsRepositoryTest;
 
 class AccountControllerWebTest {
 
@@ -43,9 +46,11 @@ class AccountControllerWebTest {
         JwtService jwtService = new HS256JwtService(blacklist, secret, 60_000L);
         AccountService accountService = new AccountService(users,
             Fakes.recordingLostSearches(new ArrayList<>()), blacklist, jwtService, new FakeAppleTokens());
+        ProfileService profileService = new ProfileService(users);
+        SettingsService settingsService = new SettingsService(UserSettingsRepositoryTest.inMemory(), users);
 
         mockMvc = MockMvcBuilders
-            .standaloneSetup(new UserController(users, accountService))
+            .standaloneSetup(new UserController(users, accountService, profileService, settingsService))
             .setCustomArgumentResolvers(new AuthenticationPrincipalArgumentResolver())
             .setControllerAdvice(new GlobalExceptionHandler())
             .build();
