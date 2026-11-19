@@ -14,6 +14,8 @@
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
+  padding-top: env(safe-area-inset-top, 0px);
+  box-sizing: border-box;
 }
 
 .app-container.has-tab-bar > :not(.app-tab-bar) {
@@ -72,6 +74,7 @@
 }
 
 /* Home must not scroll. The generic rule above gives every screen overflow-y: auto, so override it here. */
-.app-container.has-tab-bar > .home-page {
+.app-container.has-tab-bar > .home-page,
+.app-container.has-tab-bar > .chat-page {
   overflow: hidden;
 }

@@ -38,6 +38,8 @@ function Chat({ user }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [threads, setThreads] = useState([]);
   const [selectedThreadId, setSelectedThreadId] = useState(null);
+  // Phones show either the list or one conversation. Desktop shows both.
+  const [showThread, setShowThread] = useState(false);
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
   const [loadingThreads, setLoadingThreads] = useState(true);
@@ -92,11 +94,13 @@ function Chat({ user }) {
   useEffect(() => {
     if (visibleThreads.length === 0) {
       setSelectedThreadId(null);
+      setShowThread(false);
       return;
     }
 
     const queryThreadId = Number(searchParams.get('threadId'));
     const queryThreadExists = Number.isFinite(queryThreadId) && visibleThreads.some((thread) => thread.threadId === queryThreadId);
+    if (queryThreadExists) setShowThread(true);
 
     setSelectedThreadId((current) => {
       if (current && visibleThreads.some((thread) => thread.threadId === current)) {
@@ -241,7 +245,13 @@ function Chat({ user }) {
 
   const handleThreadSelect = (threadId) => {
     setSelectedThreadId(threadId);
+    setShowThread(true);
     setSearchParams({ threadId: String(threadId) });
+  };
+
+  const handleBackToList = () => {
+    setShowThread(false);
+    setSearchParams({});
   };
 
   const handleSend = async (event) => {
@@ -320,7 +330,7 @@ function Chat({ user }) {
 
   return (
     <div className="chat-page">
-      <div className="chat-shell">
+      <div className={`chat-shell${showThread ? ' thread-open' : ''}`}>
         <aside className="chat-sidebar">
           <div className="chat-sidebar-top">
             <div className="chat-route-line">
@@ -365,6 +375,9 @@ function Chat({ user }) {
           {selectedThread ? (
             <>
               <header className="chat-header">
+                <button type="button" className="chat-back" onClick={handleBackToList}>
+                  Messages
+                </button>
                 <ChatImage
                   src={selectedThread.otherUserPicture}
                   alt={selectedThread.otherUsername}
@@ -468,7 +481,7 @@ function Chat({ user }) {
           ) : (
             <div className="chat-empty-state large">
               <h3>Select a conversation</h3>
-              <p>Pick a chat from the left or start one from an item page.</p>
+              <p>Choose a conversation, or start one from an item page.</p>
             </div>
           )}
         </main>
