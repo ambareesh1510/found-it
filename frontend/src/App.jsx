@@ -132,7 +132,7 @@ function AppRoutes({ onLoginSuccess }) {
 
           <Route 
             path="/profile" 
-            element={user ? <Profile user={user} onLogout={handleLogout} onDeleteAccount={handleDeleteAccount} /> : <Navigate to="/login" />} 
+            element={user ? <Profile user={user} onLogout={handleLogout} onDeleteAccount={handleDeleteAccount} onProfileUpdated={(u) => setUser((prev) => ({ ...prev, ...u }))} /> : <Navigate to="/login" />}
           />
 
           <Route

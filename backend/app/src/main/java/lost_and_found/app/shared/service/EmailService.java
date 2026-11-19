@@ -80,6 +80,40 @@ public class EmailService {
         send(to, "Reset your password", html);
     }
 
+    /**
+     * Alerts a loser that a found item may match their lost report. By design the email carries
+     * NO information about the found item (category, photo, location, poster): that detail stays
+     * behind a declared search (docs/security.md). It references only the recipient's own report
+     * title and links them into the app to run their search.
+     */
+    public void sendFoundMatchEmail(String to, String lostReportTitle) throws MessagingException {
+        send(to, "An item matching your lost report may have been found", buildFoundMatchHtml(lostReportTitle));
+    }
+
+    /** Package-visible so a test can assert the body leaks no found-item detail. */
+    String buildFoundMatchHtml(String lostReportTitle) {
+        String link = frontendUrl + "/lost";
+        String reportRef = (lostReportTitle == null || lostReportTitle.isBlank())
+            ? "one of your lost reports"
+            : "your lost report “" + escapeHtml(lostReportTitle) + "”";
+        return """
+        <p>Good news — someone just reported finding an item near where you lost something.</p>
+        <p>It may match %s. We don't share found-item details by email.</p>
+        <p>Log in and run your lost search to check for a match and contact the finder:</p>
+        <p><a href="%s">Search found items</a></p>
+        <p>You're getting this because Found Item Matches and Email Updates are on in your Settings.</p>
+        """.formatted(reportRef, link);
+    }
+
+    /** Minimal HTML-escaping for user-supplied text placed into email HTML. */
+    private static String escapeHtml(String value) {
+        return value
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;");
+    }
+
     private void send(String to, String subject, String html) throws MessagingException {
         if (brevoApiKey.isEmpty()) {
             throw new MessagingException("BREVO_API_KEY is not set");

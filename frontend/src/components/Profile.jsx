@@ -2,7 +2,12 @@ import { authFetch } from '../core/http.js';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../core/config.js';
-import { markItemResolved } from '../core/services.js';
+import {
+  markItemResolved,
+  fetchMySettings,
+  updateMySettings,
+  updateMyProfile,
+} from '../core/services.js';
 import './Profile.css';
 import {
   captureTimelinePoint,
@@ -27,6 +32,49 @@ function statusLabel(status) {
   return STATUS_LABELS[status] || status;
 }
 
+// Settings toggles, grouped exactly as docs/design/ui-spec.md §Settings (screen 09) describes them.
+const PRIVACY_TOGGLES = [
+  { key: 'locationAccess', label: 'Location Access', description: 'Allow FindIt to use your location to show nearby items and improve searches.' },
+  { key: 'privateProfile', label: 'Private Profile', description: 'Hide your name and contact info from public listings.' },
+];
+const NOTIFICATION_TOGGLES = [
+  { key: 'pushNotifications', label: 'Push Notifications', description: 'Receive alerts on your device about item updates.' },
+  { key: 'lostItemAlerts', label: 'Lost Item Alerts', description: 'Get notified when new lost items are reported near you.' },
+  { key: 'foundItemMatches', label: 'Found Item Matches', description: 'Get notified when a found item matches your lost report.' },
+  { key: 'notificationSound', label: 'Notification Sound', description: 'Play a sound when receiving notifications.' },
+  { key: 'emailUpdates', label: 'Email Updates', description: 'Receive weekly summaries and item alerts via email.' },
+];
+
+/** An accessible on/off switch used for every Settings row. */
+function Switch({ checked, onChange, disabled, label }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
+      className={`switch ${checked ? 'switch--on' : ''}`}
+      onClick={onChange}
+      disabled={disabled}
+    >
+      <span className="switch__knob" />
+    </button>
+  );
+}
+
+/** A labelled Settings row: title, one explanatory line, and a switch. */
+function ToggleRow({ label, description, checked, onChange, disabled }) {
+  return (
+    <div className="setting-row">
+      <div className="setting-row__text">
+        <p className="setting-row__label">{label}</p>
+        <p className="setting-row__desc">{description}</p>
+      </div>
+      <Switch checked={checked} onChange={onChange} disabled={disabled} label={label} />
+    </div>
+  );
+}
+
 /** Item thumbnail with a text placeholder when there is no photo or it fails to load. */
 function MyItemPhoto({ src, alt }) {
   const [failed, setFailed] = useState(false);
@@ -36,8 +84,21 @@ function MyItemPhoto({ src, alt }) {
   return <img src={src} alt={alt} className="my-item-image" onError={() => setFailed(true)} />;
 }
 
-function Profile({ user, onLogout, onDeleteAccount }) {
+function Profile({ user, onLogout, onDeleteAccount, onProfileUpdated }) {
   const [activeTab, setActiveTab] = useState('myProfile');
+  const [displayUser, setDisplayUser] = useState(user);
+
+  // Settings toggles (persisted server-side via /users/me/settings).
+  const [settings, setSettings] = useState(null);
+  const [settingsLoading, setSettingsLoading] = useState(false);
+  const [settingsError, setSettingsError] = useState('');
+  const [settingsSaving, setSettingsSaving] = useState(false);
+
+  // My Profile inline edit (username + photo).
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [profileForm, setProfileForm] = useState({ username: '', picture: '' });
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileError, setProfileError] = useState('');
   const [items, setItems] = useState([]);
   const [itemsLoading, setItemsLoading] = useState(false);
   const [itemsError, setItemsError] = useState('');
@@ -85,10 +146,9 @@ function Profile({ user, onLogout, onDeleteAccount }) {
   };
   const navigate = useNavigate();
 
-  const userName = user?.username || "GT Student";
-  const userEmail = user?.email || "student@gatech.edu";
-  //const userPic = user?.picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-  const userPic = user?.picture || `https://ui-avatars.com/api/?name=${userName}&background=random&color=fff&size=128`;
+  const userName = displayUser?.username || "GT Student";
+  const userEmail = displayUser?.email || "student@gatech.edu";
+  const userPic = displayUser?.picture || `https://ui-avatars.com/api/?name=${userName}&background=random&color=fff&size=128`;
 
   useEffect(() => {
     if (activeTab !== 'myItems' || !user?.id) return;
@@ -118,6 +178,70 @@ function Profile({ user, onLogout, onDeleteAccount }) {
 
     fetchMyItems();
   }, [activeTab, user?.id]);
+
+  // Load the Settings toggles the first time the Settings tab is opened.
+  useEffect(() => {
+    if (activeTab !== 'settings' || settings !== null) return;
+
+    let cancelled = false;
+    const loadSettings = async () => {
+      setSettingsLoading(true);
+      setSettingsError('');
+      try {
+        const data = await fetchMySettings();
+        if (!cancelled) setSettings(data);
+      } catch (err) {
+        if (!cancelled) setSettingsError(err?.message || 'Could not load your settings.');
+      } finally {
+        if (!cancelled) setSettingsLoading(false);
+      }
+    };
+
+    loadSettings();
+    return () => { cancelled = true; };
+  }, [activeTab, settings]);
+
+  // Optimistic toggle: flip locally, persist, and revert on failure.
+  const handleSettingToggle = async (key) => {
+    if (!settings || settingsSaving) return;
+    const previous = settings;
+    const next = { ...settings, [key]: !settings[key] };
+    setSettings(next);
+    setSettingsSaving(true);
+    setSettingsError('');
+    try {
+      const saved = await updateMySettings(next);
+      setSettings(saved);
+    } catch (err) {
+      setSettings(previous);
+      setSettingsError(err?.message || 'Could not save that change. Please try again.');
+    } finally {
+      setSettingsSaving(false);
+    }
+  };
+
+  const startEditingProfile = () => {
+    setProfileForm({ username: displayUser?.username || '', picture: displayUser?.picture || '' });
+    setProfileError('');
+    setEditingProfile(true);
+  };
+
+  const handleProfileSave = async (event) => {
+    event.preventDefault();
+    if (!profileForm.username.trim()) return;
+    setProfileSaving(true);
+    setProfileError('');
+    try {
+      const updated = await updateMyProfile(profileForm.username.trim(), profileForm.picture.trim() || null);
+      setDisplayUser((prev) => ({ ...prev, ...updated }));
+      if (onProfileUpdated) onProfileUpdated(updated);
+      setEditingProfile(false);
+    } catch (err) {
+      setProfileError(err?.message || 'Could not update your profile.');
+    } finally {
+      setProfileSaving(false);
+    }
+  };
 
   // Items are grouped first by what they are (Lost vs Found), then split into active and resolved.
   const groupedItems = useMemo(() => {
@@ -269,7 +393,65 @@ function Profile({ user, onLogout, onDeleteAccount }) {
         return (
           <div className="tab-content">
             <h2>My Profile</h2>
-            <p>Welcome back, {userName}! Here you can view your personal details.</p>
+            {!editingProfile ? (
+              <div className="profile-details">
+                <img src={userPic} alt="" className="profile-details__avatar" />
+                <dl className="profile-details__list">
+                  <div className="profile-details__row">
+                    <dt>Username</dt>
+                    <dd>{userName}</dd>
+                  </div>
+                  <div className="profile-details__row">
+                    <dt>Email</dt>
+                    <dd>{userEmail}</dd>
+                  </div>
+                </dl>
+                <button type="button" className="my-item-btn primary" onClick={startEditingProfile}>
+                  Edit profile
+                </button>
+              </div>
+            ) : (
+              <form className="profile-edit" onSubmit={handleProfileSave}>
+                <label className="profile-edit__field">
+                  <span>Username</span>
+                  <input
+                    type="text"
+                    value={profileForm.username}
+                    onChange={(e) => setProfileForm((f) => ({ ...f, username: e.target.value }))}
+                    maxLength={50}
+                    required
+                  />
+                </label>
+                <label className="profile-edit__field">
+                  <span>Photo URL</span>
+                  <input
+                    type="url"
+                    value={profileForm.picture}
+                    onChange={(e) => setProfileForm((f) => ({ ...f, picture: e.target.value }))}
+                    placeholder="https://…  (leave blank to remove)"
+                  />
+                </label>
+                <p className="profile-edit__note">Email ({userEmail}) can’t be changed here.</p>
+                {profileError && <p className="items-message error" role="alert">{profileError}</p>}
+                <div className="profile-edit__actions">
+                  <button
+                    type="submit"
+                    className="my-item-btn primary"
+                    disabled={profileSaving || !profileForm.username.trim()}
+                  >
+                    {profileSaving ? 'Saving…' : 'Save'}
+                  </button>
+                  <button
+                    type="button"
+                    className="my-item-btn secondary"
+                    onClick={() => setEditingProfile(false)}
+                    disabled={profileSaving}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         );
       case 'myItems':
@@ -292,23 +474,63 @@ function Profile({ user, onLogout, onDeleteAccount }) {
         return (
           <div className="tab-content">
             <h2>Settings</h2>
-            <div className="timeline-setting">
-              <div>
-                <p className="timeline-setting__title">Timeline</p>
-                <p className="timeline-setting__status">{timelineEnabled ? 'On' : 'Off'}</p>
-              </div>
-              <button
-                type="button"
-                className="timeline-toggle-btn"
-                aria-pressed={timelineEnabled}
-                onClick={handleTimelineToggle}
-              >
-                {timelineEnabled ? 'Turn off' : 'Turn on'}
-              </button>
-            </div>
-            <p>Records coarse locations every five minutes while FindIt is open. History stays on this device for seven days. Turning Timeline off deletes the saved history.</p>
-            {timelineError && <p className="items-message error" role="alert">{timelineError}</p>}
-            
+
+            {settingsLoading && <p className="items-message">Loading your settings…</p>}
+            {settingsError && <p className="items-message error" role="alert">{settingsError}</p>}
+
+            {settings && (
+              <>
+                <section className="settings-group">
+                  <h3 className="settings-group__title">Privacy &amp; Location</h3>
+                  {PRIVACY_TOGGLES.map((t) => (
+                    <ToggleRow
+                      key={t.key}
+                      label={t.label}
+                      description={t.description}
+                      checked={Boolean(settings[t.key])}
+                      disabled={settingsSaving}
+                      onChange={() => handleSettingToggle(t.key)}
+                    />
+                  ))}
+
+                  {/* Timeline is a browser-local history (task-002), not a server setting. */}
+                  <div className="setting-row">
+                    <div className="setting-row__text">
+                      <p className="setting-row__label">Timeline</p>
+                      <p className="setting-row__desc">
+                        Records coarse locations every five minutes while FindIt is open. History stays on
+                        this device for seven days; turning it off deletes the saved history.
+                      </p>
+                    </div>
+                    <Switch
+                      checked={timelineEnabled}
+                      onChange={handleTimelineToggle}
+                      label="Timeline"
+                    />
+                  </div>
+                  {timelineError && <p className="items-message error" role="alert">{timelineError}</p>}
+                </section>
+
+                <section className="settings-group">
+                  <h3 className="settings-group__title">Notifications</h3>
+                  {NOTIFICATION_TOGGLES.map((t) => (
+                    <ToggleRow
+                      key={t.key}
+                      label={t.label}
+                      description={t.description}
+                      checked={Boolean(settings[t.key])}
+                      disabled={settingsSaving}
+                      onChange={() => handleSettingToggle(t.key)}
+                    />
+                  ))}
+                  <p className="settings-group__note">
+                    Found Item Matches are emailed when Email Updates is also on. The other
+                    notification options are saved but not delivered yet.
+                  </p>
+                </section>
+              </>
+            )}
+
             {onDeleteAccount && (
               <section className="danger-zone" aria-labelledby="delete-account-heading">
                 <h3 id="delete-account-heading">Delete account</h3>

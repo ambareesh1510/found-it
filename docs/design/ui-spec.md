@@ -117,7 +117,9 @@ badge. Messages is its own tab, not a sub-view of either side.
 Grouped toggle rows, each with a label and one explanatory line. **Privacy & Location**:
 Location Access (on), Private Profile (off). **Notifications**: Push Notifications,
 Lost Item Alerts, Found Item Matches, Notification Sound (all on), Email Updates (off).
-Defaults shown are the intended defaults.
+Defaults shown are the intended defaults. **Found Item Matches** is delivered as an email alert
+(only when **Email Updates** is also on); the other notification toggles are stored preferences
+with no delivery wired up yet.
 
 ## Interaction rules
 

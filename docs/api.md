@@ -30,7 +30,14 @@ Errors are JSON `ApiError` bodies produced by `GlobalExceptionHandler`.
 ## Users — `/users`
 
 `GET /users/me` → `CurrentUserResponseDTO` (the session check the SPA runs on boot).
-`GET /users/{userId}` → `UserProfileResponseDTO`.
+`PUT /users/me` → `CurrentUserResponseDTO`. Body `UpdateProfileDTO { username, picture? }` updates the
+signed-in user's display name and photo (email is not editable here). Username is normalized to
+lowercase and must be unique: a clash → `409`; blank → `400`; no session → `401`.
+`GET /users/{userId}` → `UserProfileResponseDTO`. `username` is `null` when that user has
+**Private Profile** on and the requester is not that user.
+`GET /users/me/settings` → `UserSettingsDTO` (the seven Settings toggles; a default row is created the
+first time). `PUT /users/me/settings` replaces them with the posted `UserSettingsDTO`. `401` without a
+session. See [data-model.md](data-model.md#user_settings-built).
 `DELETE /users/me` → `204`. Anonymizes the signed-in account, deletes its declared searches, revokes the
 current token, and revokes any Sign in with Apple link at Apple (best-effort; a failure is logged and does not block deletion). The row and its posts, claims, and threads stay. `401` without a session.
 See [security.md](security.md#data-handling--privacy).
@@ -124,6 +131,7 @@ never persisted. The saved declaration has a null `location` and `usedTimeline: 
 `imageUrl`, `locationText`, `eventTime`. It omits `detailLocation`, coordinates, and poster
 identity, so a loser cannot reach a finder before a claim is made.
 
-## Endpoints the redesign requires — not yet built
+## Endpoints the redesign requires
 
-- **`GET`/`PATCH /users/me/settings`** — the Settings screen toggles.
+All redesign endpoints are now built, including the Settings toggles
+(`GET`/`PUT /users/me/settings`) and profile edit (`PUT /users/me`) above.

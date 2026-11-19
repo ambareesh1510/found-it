@@ -45,6 +45,21 @@ export function deleteAccount(fetchImpl) {
   return apiRequest('DELETE', '/users/me', undefined, fetchImpl);
 }
 
+/** Updates the signed-in user's editable profile fields. Returns the updated current-user record. */
+export function updateMyProfile(username, picture, fetchImpl) {
+  return apiRequest('PUT', '/users/me', { username, picture }, fetchImpl);
+}
+
+/** The signed-in user's Settings toggles (created with defaults the first time). */
+export function fetchMySettings(fetchImpl) {
+  return apiRequest('GET', '/users/me/settings', undefined, fetchImpl);
+}
+
+/** Replaces the signed-in user's Settings toggles. `settings` must include every toggle. */
+export function updateMySettings(settings, fetchImpl) {
+  return apiRequest('PUT', '/users/me/settings', settings, fetchImpl);
+}
+
 /** Short-lived ticket for opening the chat WebSocket (`/ws/chat?ticket=...`). Valid for about a minute. */
 export function createChatSocketTicket(fetchImpl) {
   return apiRequest('POST', '/chat/ws-ticket', undefined, fetchImpl);

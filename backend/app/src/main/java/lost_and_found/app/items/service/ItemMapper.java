@@ -24,10 +24,16 @@ public class ItemMapper {
         boolean viewerIsPoster = viewerId != null && viewerId.equals(itemPost.getUser().getId());
         String detailLocation = viewerIsPoster ? itemPost.getDetailLocation() : null;
 
+        // A poster who turned on "Private Profile" has their name hidden from everyone else
+        // (docs/design/ui-spec.md Settings; docs/security.md). The poster id stays so chat and
+        // claims still route correctly; only the displayed name is withheld.
+        boolean hideName = !viewerIsPoster && itemPost.getUser().isPrivateProfile();
+        String posterUsername = hideName ? null : itemPost.getUser().getUsername();
+
         return new ItemPostResponseDTO(
             itemPost.getId(),
             itemPost.getUser().getId(),
-            itemPost.getUser().getUsername(),
+            posterUsername,
             itemPost.getTitle(),
             itemPost.getDescription(),
             itemPost.getCategory(),

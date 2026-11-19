@@ -18,6 +18,7 @@ import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuer
 
 import lost_and_found.app.items.domain.ItemPost;
 import lost_and_found.app.items.domain.ItemPostStatus;
+import lost_and_found.app.items.domain.PostType;
 import lost_and_found.app.items.infra.ItemPostRepository;
 import lost_and_found.app.items.service.ItemSpecifications;
 
@@ -64,6 +65,23 @@ public class TestItemPostRepository implements ItemPostRepository {
 
         nearby.sort(Comparator.comparingDouble(item -> distanceMeters(center, item.getLocation())));
         return nearby;
+    }
+
+    @Override
+    public List<ItemPost> findMatchingLostReports(String category, Point center, double radiusMeters, Long finderUserId) {
+        List<ItemPost> matches = new ArrayList<>();
+        for (ItemPost item : store.values()) {
+            if (item.getPostType() != PostType.LOST) continue;
+            if (item.getStatus() != ItemPostStatus.OPEN) continue;
+            if (category == null || item.getCategory() == null
+                || !category.equalsIgnoreCase(item.getCategory())) continue;
+            if (item.getUser() == null || item.getUser().getId() == null) continue;
+            if (item.getUser().getId().equals(finderUserId)) continue;
+            Point p = item.getLocation();
+            if (p == null) continue;
+            if (distanceMeters(center, p) <= radiusMeters) matches.add(item);
+        }
+        return matches;
     }
 
     private double distanceMeters(Point a, Point b) {
